@@ -19,6 +19,7 @@
   "homepage": "https://github.com/bbname/PlanYourVisit#readme",
   "dependencies": {
     "babel-loader": "^7.1.5",
+    "firebase": "^5.4.2",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "webpack": "^4.17.2"
