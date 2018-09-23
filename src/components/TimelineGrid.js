@@ -1,35 +1,56 @@
 import React from 'react'
 import GridCell from './TimelineGrid/GridCell'
+import {Grid} from 'react-bootstrap'
+import HoursRow from './TimelineGrid/HoursRow'
 
 export default class TimelineGrid extends React.Component {
     constructor(){
         super();
+        this.state={
+            x : 0,
+            y : 0
+        }
     }
 
-    renderGrids(){
-        // const GridRow = [
-        // <GridCell text="6:00"/>,
-        // <GridCell text="7:00"/>,
-        // <GridCell text="8:00"/>,
-        // <GridCell text="9:00"/>,
-        // <GridCell text="10:00"/>,
-        // <GridCell text="11:00"/>
-        // ];
-        const GridRow = [
-            ];
+    _onMoueseMove(e){
+      this.setState({
+        x : e.screenX,
+        y : e.screenY
+      });
+    }
+    _onMoueseMove2(e){
+        this.setState({
+            x : e.pageX,
+            y : e.pageY
+        });
+      }
 
-        for(let i = 6; i <= 24; i++){
+    renderGrids(){
+        const GridRow = [];
+
+        for(let i = 0   ; i <= 6; i++){
             let text = i+":00";
-            GridRow.push(<GridCell text={text} />,)
+            GridRow.push(<GridCell id={i} text={text} />,)
         }
         return GridRow;
     }
 
+    getFirstGridPosition(){
+        var bodyRect = document.body.getBoundingClientRect(),
+        elemRect = element.getBoundingClientRect(),
+        offset   = elemRect.top - bodyRect.top;
+
+        return "";
+    }
     render(){
+        const { x, y} = this.state;
         return (
-            <div>
+            <Grid id="timelineGrid" onMouseMove={this._onMoueseMove2.bind(this)}>
+                <h2>Mouse coordinates: { x } { y }</h2>
+                <HoursRow />
                 {this.renderGrids()}
-            </div>
+            </Grid>
+
         );
     }
 }
