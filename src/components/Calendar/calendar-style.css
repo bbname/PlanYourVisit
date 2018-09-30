@@ -1,0 +1,6 @@
+.react-datepicker{
+    display: block;
+}
+.react-datepicker__month-container{
+    float: none;
+}

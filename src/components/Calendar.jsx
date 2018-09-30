@@ -3,6 +3,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import CalendarActionCreator from "../actions/CalendarActionCreator";
 import CalendarStore from "../stores/CalendarStore";
+import "bootstrap/dist/css/bootstrap.css";
+import "./Calendar/calendar-style.css";
+import {Row, Col} from "react-bootstrap";
 
 class Calendar extends React.Component{
     constructor(props){
@@ -39,19 +42,23 @@ class Calendar extends React.Component{
     handleOnDatePickerChange(date){
         CalendarActionCreator.selectWeekByDayInCalendar(date);        
     }
- 
+
     render() {
         return (
-        <div>
-            <DatePicker 
-                inline
-                locale="pl"
-                selected = {this.state.selectedDate}
-                minDate={this.state.minDate}
-                onChange = {this.handleOnDatePickerChange}
-                highlightDates = {this.state.highlightDates}
-            />
-        </div>
+                <Row>
+                    <Col md={4}>
+                    </Col>
+                    <Col md={4}>
+                        <DatePicker 
+                                inline
+                                locale="pl"
+                                selected = {this.state.selectedDate}
+                                minDate={this.state.minDate}
+                                onChange = {this.handleOnDatePickerChange}
+                                highlightDates = {this.state.highlightDates}
+                            />                 
+                    </Col>
+                </Row>
         );
     }
 }
