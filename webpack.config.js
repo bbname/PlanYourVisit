@@ -7,28 +7,22 @@ module.exports = {
         path: path.join(__dirname, '/dist'),
         filename: 'index_bundle.js'
     },
+    devtool: "#eval-source-map",
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: 'babel-loader',
-                    options: { presets: ['react']}
-                }
+                use: ['babel-loader']
+                // use: {
+                //     loader: 'babel-loader',
+                //     options: { presets: ['react']}
+                // }
             },
             {
                 test: /\.css$/,
                 use: [ 'style-loader', 'css-loader' ]
             }
- 
-            // {
-            //     test: /\.css$/,
-            //     use: {
-            //         loader: 'css-loader',
-            //         loader: 'style-loader'
-            //     }
-            // }
         ]
     },
     plugins: [
