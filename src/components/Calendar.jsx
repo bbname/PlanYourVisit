@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import CalendarActionCreator from "../actions/CalendarActionCreator";
 import CalendarStore from "../stores/CalendarStore";
 import "bootstrap/dist/css/bootstrap.css";
-import "./Calendar/calendar-style.css";
+import "./styles/calendar-style.css";
 import {Row, Col} from "react-bootstrap";
 
 class Calendar extends React.Component{
@@ -45,20 +45,20 @@ class Calendar extends React.Component{
 
     render() {
         return (
-                <Row>
-                    <Col md={4}>
-                    </Col>
-                    <Col md={4}>
-                        <DatePicker 
-                                inline
-                                locale="pl"
-                                selected = {this.state.selectedDate}
-                                minDate={this.state.minDate}
-                                onChange = {this.handleOnDatePickerChange}
-                                highlightDates = {this.state.highlightDates}
-                            />                 
-                    </Col>
-                </Row>
+            <Row>
+                <Col xs={12} sm={2} md={3} lg={4}>
+                </Col>
+                <Col xs={12} sm={8} md={6} lg={4}>
+                    <DatePicker 
+                            inline
+                            locale="pl"
+                            selected = {this.state.selectedDate}
+                            minDate = {this.state.minDate}
+                            onChange = {this.handleOnDatePickerChange}
+                            highlightDates = {this.state.highlightDates}
+                        />                 
+                </Col>
+            </Row>
         );
     }
 }
