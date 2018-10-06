@@ -93,3 +93,26 @@ button.control-arrow.control-prev{
 .carousel.carousel-slider .control-arrow:hover{
     background: transparent;
 }
+
+.hour-reserved {
+    text-decoration: line-through;
+    color: #98a1ab;
+    cursor: default;
+}
+
+.hour-free {
+    color: #216ba5;
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Porpawic potem hovery na tabele */
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    /* background-color: none; */
+  }
+
+.table-striped tbody tr:nth-of-type(odd){
+    /* background-color: #dee2e6; */
+  }

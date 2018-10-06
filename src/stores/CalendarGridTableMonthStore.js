@@ -4,14 +4,19 @@ import AppConst from "../constants/AppConst";
 import CalendarFunctions from "../utils/CalendarFunctions"
 import moment from 'moment';
 
-let _selectedDate = moment();
+let _selectedDate = null;
 let _plannerId = null;
-let _minDate = CalendarFunctions.getMinDate();
-let _maxDate = CalendarFunctions.getMaxDate();
-let _highlightedDates = CalendarFunctions.getHighlightDates(_selectedDate);
+let _previousWeekDaysHours = [];
+let _currentWeekDaysHours = [];
+let _nextWeekDaysHours = [];
+let _previousWeek = [];
+let _currentWeek = [];
+let _nextWeek = [];
+let _isCurrentWeekFirstAvailableInMonth = false;
+let _isCurrentWeekLastAvailableInMonth = false;
 const ALL = "all";
 
-class CalendarStore extends EventEmitter {
+class CalendarGridTableMonthStore extends EventEmitter {
     constructor() {
         super();
         this.dispatchToken = AppDispatcher.register(this.dispatcherCallback.bind(this));
@@ -48,12 +53,12 @@ class CalendarStore extends EventEmitter {
         this.removeListener(ALL, callback);
     }
 
-    getHighlightedDates(){
-        return _highlightedDates;
+    isCurrentWeekFirstAvailableInMonth(){
+        return _isCurrentWeekFirstAvailableInMonth;
     }
 
-    setHighlightedDates(selectedDate){
-        _highlightedDates = CalendarFunctions.getHighlightDates(selectedDate);
+    isCurrentWeekLastAvailableInMonth(){
+        return _isCurrentWeekLastAvailableInMonth;
     }
 
     getSelectedDate(){
@@ -64,17 +69,9 @@ class CalendarStore extends EventEmitter {
         _selectedDate = selectedDate;
     }
 
-    getMinDate(){
-        return _minDate;
-    }
-
-    getMaxDate(){
-        return _maxDate;
-    }
-
     getPlannerId(){
         return _plannerId;
     }
 }
 
-export default new CalendarStore();
+export default new CalendarGridTableMonthStore();

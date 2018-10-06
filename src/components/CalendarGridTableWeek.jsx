@@ -4,93 +4,84 @@ import { Carousel }  from 'react-responsive-carousel';
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles/calendarGrid-style.css";
 import {Row, Table} from "react-bootstrap";
+import CalendarGridColumnDay from "./CalendarGridColumnDay"
+import CalendarGridTableWeekStore from "../stores/CalendarGridTableWeekStore"
+const nrOfHoursInDayColumn = 15;
 
 class CalendarGridTableWeek extends Component {
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
         this.state = {
-            mondaySlides: null,
-            tuesdaySlides: null,
+            plannerId: CalendarGridTableWeekStore.getPlannerId(),
+            mondayDate: CalendarGridTableWeekStore.getMonday().date,
+            mondayHourObjs: CalendarGridTableWeekStore.getMonday().hourObjs,
+            mondaySlides: getSlides(CalendarGridTableWeekStore.getMonday().hourObjs),
+            tuesdayDate: CalendarGridTableWeekStore.getTuesday().date,
+            tuesdayHourObjs: CalendarGridTableWeekStore.getTuesday().hourObjs,
+            tuesdaySlides: getSlides(CalendarGridTableWeekStore.getTuesday().hourObjs),
+            wednesdayDate: null,
+            wednesdayHourObjs: null,
             wednesdaySlides: null,
+            thursdayDate: null,
+            thursdayHourObjs: null,
             thursdaySlides: null,
+            fridayDate: null,
+            fridayHourObjs: null,
             fridaySlides: null,
+            saturdayDate: null,
+            saturdayHourObjs: null,
             saturdaySlides: null,
+            sundayDate: null,
+            sundayHourObjs: null,
             sundaySlides: null
         }
     }
 
-    componentDidMount(){
-        let slides = this.generateWayWithCarousel();
+    componentWillMount() {
+        CalendarGridColumnDayStore.addChangeListener(this._onChange);
+    }
+ 
+    componentWillUnmount() {
+        CalendarGridColumnDayStore.removeChangeListener(this._onChange);
+    }
+
+    _onChange = () => {
         this.setState({
-            mondaySlides: slides,
-            tuesdaySlides: slides,
-            wednesdaySlides: slides,
-            thursdaySlides: slides,
-            fridaySlides: slides,
-            saturdaySlides: slides,
-            sundaySlides: slides
-        });
+            mondayDate: CalendarGridTableWeekStore.getMonday().date,
+            mondayHourObjs: CalendarGridTableWeekStore.getMonday().hourObjs,
+            mondaySlides: getSlides(CalendarGridTableWeekStore.getMonday().hourObjs),
+            tuesdayDate: CalendarGridTableWeekStore.getTuesday().date,
+            tuesdayHourObjs: CalendarGridTableWeekStore.getTuesday().hourObjs,
+            tuesdaySlides: getSlides(CalendarGridTableWeekStore.getTuesday().hourObjs)
+        })
     }
 
-    generateTable(){
-        let rows = [];
-        for(var hour = 7; hour < 19; hour++){
-            let cells =[];
-            for(var dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++){
-                let colName = "column-" + dayOfWeek;
-                if(dayOfWeek === 5 && hour > 9 && hour < 13){
-                    cells.push(<td className={colName}>{hour + ":00"}</td>);
-                }
-                else if(dayOfWeek < 5){
-                    cells.push(<td className={colName}>{hour + ":00"}</td>);
-                }
-                else{
-                    cells.push(<td className={colName}></td>);
-                }
-            }
-            rows.push(<tr>{cells}</tr>);
-        }
-
-        return rows;
+    getSlides(hourObjs){
+        return <CalendarGridColumnDay
+                    nrOfHoursInColumn = {nrOfHoursInDayColumn}
+                    handleOnHourClick = {this.handleOnHourClick}
+                    hourObjs = {hourObjs}
+                />
     }
 
-    generateTablesByColumns(columns){
-        let result = [];
-        for(var column = 0; column < columns.length; column++){
-            result.push(
-                <Table striped condensed hover className="table-column">
-                    <tbody>
-                        {columns[column]}
-                    </tbody>
-                </Table>
-            );
-        }
-
-        return result;
-    }
-
-    generateWayWithCarousel(){
-        let columns = [];
-        for(var dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++){
-            let column = [];
-            for(var hour = 7; hour < 19; hour++){
-                let cellValue = hour + ":00";
-                column.push(<tr><td>{cellValue}</td></tr>);
-            }
-            columns.push(column);
-        }
-
-        return this.generateTablesByColumns(columns);
-    }
-
-    handleOnHourClick(e){
-        if(e.target.value === " "){
-            alert("To jest to puste zlapane.");
-        }
-        else{
-            alert(e.target.value);
-        }
+    generateTableWeek(){
+        return (
+            <Table bordered condensed responsive>
+                {this.generateThead()}
+                <tbody>
+                    <tr id="week-days-tr-row" className="container">  
+                        {this.generateTbodyTrTdItemDaySlides(this.state.mondaySlides)}     
+                        {this.generateTbodyTrTdItemDaySlides(this.state.tuesdaySlides)}  
+                        {this.generateTbodyTrTdItemDaySlides(this.state.wednesdaySlides)}       
+                        {this.generateTbodyTrTdItemDaySlides(this.state.thursdaySlides)}  
+                        {this.generateTbodyTrTdItemDaySlides(this.state.fridaySlides)}  
+                        {this.generateTbodyTrTdItemDaySlides(this.state.saturdaySlides)}  
+                        {this.generateTbodyTrTdItemDaySlides(this.state.sundaySlides)}  
+                    </tr>
+                </tbody>
+            </Table>
+        );
     }
 
     generateThead(){
@@ -125,47 +116,18 @@ class CalendarGridTableWeek extends Component {
         );
     }
 
-    generateTableWeek(){
-        return (
-            <Table bordered condensed responsive>
-                {this.generateThead()}
-                <tbody>
-                    <tr id="week-days-tr-row" className="container">  
-                        {this.generateTbodyTrTdItemDaySlides(this.state.mondaySlides)}     
-                        {this.generateTbodyTrTdItemDaySlides(this.state.tuesdaySlides)}  
-                        {this.generateTbodyTrTdItemDaySlides(this.state.wednesdaySlides)}       
-                        {this.generateTbodyTrTdItemDaySlides(this.state.thursdaySlides)}  
-                        {this.generateTbodyTrTdItemDaySlides(this.state.fridaySlides)}  
-                        {this.generateTbodyTrTdItemDaySlides(this.state.saturdaySlides)}  
-                        {this.generateTbodyTrTdItemDaySlides(this.state.sundaySlides)}  
-                    </tr>
-                </tbody>
-            </Table>
-        );
+    handleOnHourClick(e){
+        if(e.target.value === " "){
+            alert("To jest to puste zlapane.");
+        }
+        else{
+            alert(e.target.value);
+        }
     }
 
-        render() {
-        const divStyle = {
-            height: "100%",
-            backgroundColor: "white"
-        }
+    render() {
         return (
-        <Row className="hours-grid-container">
-            <Carousel 
-                className="col-xs-12 col-sm-12 col-md-12 week-carousel" 
-                showThumbs={false}
-                showStatus={false}
-                showIndicators={false}>
-                <div style={divStyle}>
-                    {this.generateTable()}
-                </div>
-                <div style={divStyle}>
-                    <p className="legend">
-                        Legend2
-                    </p>
-                </div>
-            </Carousel>
-        </Row>
+            this.generateTableWeek()
         );
     }
 

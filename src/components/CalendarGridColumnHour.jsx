@@ -8,18 +8,30 @@ class CalendarGridColumnHour extends Component {
         super(props);       
     }
 
-    // handleOnClick(e){
-    //     alert(e.target.value);
-    // }
+    generateHour(){
+        if(this.props.hourObj.isReserved){
+            return (
+                <tr>
+                    <td className="hour-reserved">
+                        {this.props.hourObj.hour}
+                    </td>
+                </tr>
+            );
+        }
+        else{
+            return (
+                <tr>
+                    <td className="hour-free" onClick={this.props.handleOnHourClick}>
+                        {this.props.hourObj.hour}
+                    </td>
+                </tr>
+            );
+        }
+    }
 
-    // dodac link np a href czy cos, a takze przede wszystkim handlera na klika na wybrana komorke
     render(){
         return (
-            <tr>
-                <td onClick={this.props.handleOnHourClick}>
-                    {hour}
-                </td>
-            </tr>
+            this.generateHour()
         );
     }
 }

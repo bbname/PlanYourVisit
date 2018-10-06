@@ -17,6 +17,23 @@ module.exports ={
     
         return minDate;
     },
+    getMaxDate: function(){
+        let currentDate = moment().locale('pl');
+        let sixWeekAfterCurrentDate = currentDate.add(49, "days");
+        let sixWeekDayNr = sixWeekAfterCurrentDate.day();
+        // 0 nd
+        // 1 pn
+        // 6 sb
+        const maxDate = moment(sixWeekAfterCurrentDate);
+        if(sixWeekDayNr == 0){
+            maxDate.subtract(6, "days");
+        }
+        else{
+            maxDate.subtract(sixWeekDayNr, "days");
+        }
+    
+        return maxDate;
+    },
     getHighlightDates: function(selectedDate){
         let currentdayOfWeekNr = selectedDate.day();
         let startDayOfWeekNr = 1;

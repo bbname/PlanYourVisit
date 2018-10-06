@@ -12,24 +12,22 @@ class Calendar extends React.Component{
         super(props);
 
         this.state = {
-            selectedDate : CalendarStore.getSelectedDate(),
+            plannerId: CalendarStore.getPlannerId(),
+            selectedDate: CalendarStore.getSelectedDate(),
             highlightDates: CalendarStore.getHighlightedDates(),
-            minDate : CalendarStore.getMinDate()
+            minDate: CalendarStore.getMinDate(),
+            maxDate: CalendarStore.getMaxDate()
         }
         this.handleOnDatePickerChange = this.handleOnDatePickerChange.bind(this);
         this._onChange = this._onChange.bind(this);
     }
  
     componentWillMount() {
-        // CalendarStore.addChangeListener("StoreSelectWholeWeekByDayInCalendar",this._onChange);
         CalendarStore.addChangeListener(this._onChange);
-        // CalendarStore.addChangeListener("all",this._onChange);
     }
  
     componentWillUnmount() {
-        // CalendarStore.removeChangeListener("StoreSelectWholeWeekByDayInCalendar",this._onChange);
         CalendarStore.removeChangeListener(this._onChange);
-        // CalendarStore.removeChangeListener("all",this._onChange);
     }
 
     _onChange = () => {
@@ -54,6 +52,7 @@ class Calendar extends React.Component{
                             locale="pl"
                             selected = {this.state.selectedDate}
                             minDate = {this.state.minDate}
+                            maxDate = {this.state.maxDate}
                             onChange = {this.handleOnDatePickerChange}
                             highlightDates = {this.state.highlightDates}
                         />                 

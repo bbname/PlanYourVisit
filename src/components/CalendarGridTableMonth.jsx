@@ -4,12 +4,16 @@ import { Carousel }  from 'react-responsive-carousel';
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles/calendarGrid-style.css";
 import {Row, Table} from "react-bootstrap";
+import CalendarStore from "../stores/CalendarStore";
+import CalendarGridTableMonthStore from "../stores/CalendarStore";
 
 class CalendarGridTableMonth extends Component {
     constructor(){
         super();
 
         this.state = {
+            plannerId: CalendarGridTableMonthStore.getPlannerId(),
+                
             previousWeek: null,
             currentWeek: null,
             nextWeek: null,
@@ -18,17 +22,18 @@ class CalendarGridTableMonth extends Component {
         }
     }
 
-    componentDidMount(){
-        let slides = this.generateWayWithCarousel();
+    componentWillMount() {
+        CalendarStore.addChangeListener(this._onChange);
+    }
+ 
+    componentWillUnmount() {
+        CalendarStore.removeChangeListener(this._onChange);
+    }
+
+    _onChange = () => {
         this.setState({
-            mondaySlides: slides,
-            tuesdaySlides: slides,
-            wednesdaySlides: slides,
-            thursdaySlides: slides,
-            fridaySlides: slides,
-            saturdaySlides: slides,
-            sundaySlides: slides
-        });
+            selectedDate : CalendarStore.getSelectedDate(),
+        })
     }
 
     generateWeekTable(){
