@@ -1,5 +1,6 @@
 module.exports = {
     GET_HOURS_FOR_DAY: "GetHoursForDay",
+    SET_CALENDAR_GRID_DATA: "SetCalendarGridData",
     GET_PLANNER_CALENDAR: "GetPlannerCalendar",
     SET_HOURS_FOR_DAY: "SetHoursForDay",
     SET_NEXT_WEEK_DATES: "SetNextWeekDates",

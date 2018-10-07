@@ -8,7 +8,7 @@ let _selectedDate = moment();
 let _plannerId = null;
 let _minDate = CalendarFunctions.getMinDate();
 let _maxDate = CalendarFunctions.getMaxDate();
-let _highlightedDates = CalendarFunctions.getHighlightDates(_selectedDate);
+let _highlightedDates = CalendarFunctions.getWholeWeekBySelectedDate(_selectedDate);
 const ALL = "all";
 
 class CalendarStore extends EventEmitter {
@@ -53,7 +53,7 @@ class CalendarStore extends EventEmitter {
     }
 
     setHighlightedDates(selectedDate){
-        _highlightedDates = CalendarFunctions.getHighlightDates(selectedDate);
+        _highlightedDates = CalendarFunctions.getWholeWeekBySelectedDate(selectedDate);
     }
 
     getSelectedDate(){

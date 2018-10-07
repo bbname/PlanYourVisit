@@ -3,14 +3,15 @@ import AppDispatcher from "../dispatcher/AppDispatcher";
 import AppConst from "../constants/AppConst";
 
 let _plannerId = null;
+let _selectedDate = null; 
 let _monday = {};
 let _tuesday = {};
-let _mondayDate = null;
-let _mondayHourObjs = null;
-let _mondaySlides = null;
-let _tuesdayDate = null;
-let _tuesdayHourObjs = null;
-let _tuesdaySlides = null;
+// let _mondayDate = null;
+// let _mondayHourObjs = null;
+// let _mondaySlides = null;
+// let _tuesdayDate = null;
+// let _tuesdayHourObjs = null;
+// let _tuesdaySlides = null;
 let _wednesdayDate = null;
 let _wednesdayHourObjs = null;
 let _wednesdaySlides = null;
@@ -20,12 +21,12 @@ let _thursdaySlides = null;
 let _fridayDate = null;
 let _fridayHourObjs = null;
 let _fridaySlides = null;
-let _saturdayDate = null;
-let _saturdayHourObjs = null;
-let _saturdaySlides = null;
-let _sundayDate = null;
-let _sundayHourObjs = null;
-let _sundaySlides = null;
+// let _saturdayDate = null;
+// let _saturdayHourObjs = null;
+// let _saturdaySlides = null;
+// let _sundayDate = null;
+// let _sundayHourObjs = null;
+// let _sundaySlides = null;
 const ALL = "all";
 
 class CalendarGridTableWeekStore extends EventEmitter {
@@ -39,7 +40,7 @@ class CalendarGridTableWeekStore extends EventEmitter {
             case AppConst.GET_PLANNER_CALENDAR: {
                 this._plannerId = action.payload.plannerId
             }
-            case AppConst.FILL_CALENDAR_GRID: {
+            case AppConst.SET_CALENDAR_GRID_DATA: {
                 this._monday.date = action.payload.mondayDate;
                 this._monday.hourObjs = action.payload.mondayHourObjs;
                 this._tuesday.date= action.payload.tuesdayDate;
@@ -51,11 +52,11 @@ class CalendarGridTableWeekStore extends EventEmitter {
                 this._fridayDate = action.payload.fridayDate;
                 this._fridayHourObjs = action.payload.fridayHourObjs;
             }
-            case AppConst.SET_HOURS_FOR_DAY: {
-                this.setDate(action.payload.date);
-                this.setHourObjs(action.payload.hourObjs);
-                break;
-            }
+            // case AppConst.SET_HOURS_FOR_DAY: {
+            //     this.setDate(action.payload.date);
+            //     this.setHourObjs(action.payload.hourObjs);
+            //     break;
+            // }
           }
 
         this.emitChange(ALL);
@@ -72,6 +73,10 @@ class CalendarGridTableWeekStore extends EventEmitter {
 
     removeChangeListener(callback){
         this.removeListener(ALL, callback);
+    }
+
+    getSelectedDate(){
+        return _selectedDate;
     }
 
     getMonday(){

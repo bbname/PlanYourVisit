@@ -38,7 +38,7 @@ class Calendar extends React.Component{
     }
 
     handleOnDatePickerChange(date){
-        CalendarActionCreator.selectWeekByDayInCalendar(date);        
+        CalendarActionCreator.selectWeekByDayInCalendar(date, this.state.plannerId);        
     }
 
     render() {

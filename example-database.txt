@@ -1,0 +1,45 @@
+Miesiace beda liczone od 0 do 11 w moment()
+
+
+planners: {
+    planer123: {
+        2018: {
+            10: {
+                1: {
+                    7.00: {
+                        isReserved: false,
+                        visitorId: null,
+                        visitTypeId: null
+                    },
+                    7.20: {
+                        isReserved: true,
+                        visitorId: visitor123,
+                        visitTypeId: visitTypeId1
+                    },
+                    7.40: {
+                        isReserved: true,
+                        visitorId: visitor321,
+                        visitTypeId: visitTypeId1
+                    }
+                }
+            }
+        }
+    }
+}
+
+visitType: {
+    planer123: {
+        visitTypeId1: {
+            name: Strzyzenie meskie,
+            timeCost: 0:20,
+            moneyCost: 60
+            description: Strzyzenie meskie ...,
+        },
+        visitTypeId2: {
+            name: Strzyzenie damskie,
+            timeCost: 1:00,
+            moneyCost: 99
+                description: Strzyzenie damskie ...,
+        }
+    }
+}

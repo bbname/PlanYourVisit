@@ -118,12 +118,7 @@ class CalendarGrid extends Component {
         }
         return (
         <Row className="hours-grid-container">
-            <Carousel 
-                className="col-xs-12 col-sm-12 col-md-12 week-carousel" 
-                showThumbs={false}
-                showStatus={false}
-                showIndicators={false}>
-                <div style={divStyle}>
+                <div className="col-xs-12 col-sm-12 col-md-12 week-carousel"  style={divStyle}>
                     <Table bordered condensed responsive>
                         <thead id="week-days-th-row">
                             <th className="flex-item">Pn</th>
@@ -219,15 +214,130 @@ class CalendarGrid extends Component {
                         </tbody>
                     </Table>
                 </div>
-                <div style={divStyle}>
-                    <p className="legend">
-                        Legend2
-                    </p>
-                </div>
-            </Carousel>
         </Row>
         );
     }
+
+    // render() {
+    //     const divStyle = {
+    //         height: "100%",
+    //         backgroundColor: "white"
+    //     }
+    //     const lastTdFixStyle = {
+    //         marginRight: "1px"
+    //     }
+    //     return (
+    //     <Row className="hours-grid-container">
+    //         <Carousel 
+    //             className="col-xs-12 col-sm-12 col-md-12 week-carousel" 
+    //             showThumbs={false}
+    //             showStatus={false}
+    //             showIndicators={false}>
+    //             <div style={divStyle}>
+    //                 <Table bordered condensed responsive>
+    //                     <thead id="week-days-th-row">
+    //                         <th className="flex-item">Pn</th>
+    //                         <th className="flex-item">Wt</th>
+    //                         <th className="flex-item">Śr</th>
+    //                         <th className="flex-item">Cz</th>
+    //                         <th className="flex-item">Pt</th>
+    //                         <th className="flex-item">So</th>
+    //                         <th className="flex-item" style={lastTdFixStyle}>Nd</th>
+    //                     </thead>
+    //                     <tbody>
+    //                         <tr id="week-days-tr-row" className="container">
+    //                             <td className="flex-item">                           
+    //                                 <Carousel
+                                    
+    //                                 axis="vertical" 
+                                    
+    //                                 showThumbs={false}
+    //                                 showStatus={false}
+    //                                 showIndicators={false}>
+    //                                     {this.state.mondaySlides}
+    //                                 </Carousel>
+    //                             </td>
+    //                             <td className="flex-item">                           
+    //                                 <Carousel
+    //                                 axis="vertical" 
+                                    
+                                    
+    //                                 showThumbs={false}
+    //                                 showStatus={false}
+    //                                 showIndicators={false}>
+    //                                     {this.state.tuesdaySlides}
+    //                                 </Carousel>
+    //                             </td>
+    //                             <td className="flex-item">                           
+    //                                 <Carousel
+    //                                 axis="vertical" 
+                                    
+                                    
+    //                                 showThumbs={false}
+    //                                 showStatus={false}
+    //                                 showIndicators={false}>
+    //                                     {this.state.wednesdaySlides}
+    //                                 </Carousel>
+    //                             </td>
+    //                             <td className="flex-item">                           
+    //                                 <Carousel
+    //                                 axis="vertical" 
+                                    
+                                    
+    //                                 showThumbs={false}
+    //                                 showStatus={false}
+    //                                 showIndicators={false}>
+    //                                     {this.state.thursdaySlides}
+    //                                 </Carousel>
+    //                             </td>
+    //                             <td className="flex-item">                           
+    //                                 <Carousel
+    //                                 axis="vertical" 
+                                    
+                                    
+    //                                 showThumbs={false}
+    //                                 showStatus={false}
+    //                                 showIndicators={false}>
+    //                                     {this.state.fridaySlides}
+    //                                 </Carousel>
+    //                             </td>
+    //                             <td className="flex-item">                           
+    //                                 <Carousel
+    //                                 axis="vertical" 
+                                    
+                                    
+    //                                 showThumbs={false}
+    //                                 showStatus={false}
+    //                                 showIndicators={false}>
+    //                                     {this.state.saturdaySlides}
+    //                                 </Carousel>
+    //                             </td>
+    //                             <td className="flex-item">
+    //                             <Carousel
+    //                             axis="vertical" 
+                                
+                                
+    //                                 showThumbs={false}
+    //                                 showStatus={false}
+    //                                 showIndicators={false}>
+    //                                     {this.state.sundaySlides}
+    //                                 </Carousel>
+    //                             </td>
+    //                         </tr>
+    //                         {/* {this.generateTable()} */}
+    //                         {/* {this.generateWayWithCarousel()} */}
+    //                     </tbody>
+    //                 </Table>
+    //             </div>
+    //             <div style={divStyle}>
+    //                 <p className="legend">
+    //                     Legend2
+    //                 </p>
+    //             </div>
+    //         </Carousel>
+    //     </Row>
+    //     );
+    // }
 }
 
 export default CalendarGrid;

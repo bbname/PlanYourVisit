@@ -6,7 +6,7 @@ import moment from 'moment';
 
 let _selectedDate = moment();
 let _minDate = CalendarFunctions.getMinDate();
-let _highlightedDates = CalendarFunctions.getHighlightDates(_selectedDate);
+let _highlightedDates = CalendarFunctions.getWholeWeekBySelectedDate(_selectedDate);
 const ALL = "all";
 
 class CalendarGridStore extends EventEmitter {
@@ -57,7 +57,7 @@ class CalendarGridStore extends EventEmitter {
     }
 
     setHighlightedDates(selectedDate){
-        _highlightedDates = CalendarFunctions.getHighlightDates(selectedDate);
+        _highlightedDates = CalendarFunctions.getWholeWeekBySelectedDate(selectedDate);
     }
 
     getSelectedDate(){

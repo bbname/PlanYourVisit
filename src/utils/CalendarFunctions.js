@@ -34,7 +34,7 @@ module.exports ={
     
         return maxDate;
     },
-    getHighlightDates: function(selectedDate){
+    getWholeWeekBySelectedDate: function(selectedDate){
         let currentdayOfWeekNr = selectedDate.day();
         let startDayOfWeekNr = 1;
         let endDayOfWeekNr = 6;
