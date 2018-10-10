@@ -1,0 +1,31 @@
+.footer {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background-color: #f5f5f5;
+}
+
+#homepage-jumbotron{
+    background-image: url('../../resources/barber.jpg');
+    height: 0;
+    padding: 0;
+    padding-bottom: 75%;
+    background-position: center center;
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
+
+#homepage-jumbotron .jumbotron {
+    padding: 2rem 1rem;
+    border-bottom-right-radius: unset;
+    border-bottom-left-radius: unset;
+    background-color: #f5f5f5
+}
+
+nav {
+    margin-left: -16px;
+    margin-right: -16px;
+}
