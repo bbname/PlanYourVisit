@@ -11,8 +11,12 @@ class App extends Component {
     render() {
         return (
             <div>
+                <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossOrigin="anonymous"></link>
                 <Grid role="main">
-                    <Header />
+                    <Header 
+                        uiConfig = {this.props.uiConfig}
+                        // anonymousUser = {this.props.anonymousUser}
+                     />
                     <Row>
                         {/* <Col md={12}>
                             <h1>   </h1>
