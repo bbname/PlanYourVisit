@@ -1,5 +1,7 @@
 module.exports = {
     GET_HOURS_FOR_DAY: "GetHoursForDay",
+    REGISTER_BTN_CLICKED: "RegisterBtnClicked",
+    REGISTER_USER: "RegisterUser",
     SIGN_IN_USER: "SignInUser",
     SIGN_OUT_USER: "SignOutUser",
     CLEAR_LOGIN_DATA: "ClearLoginData",

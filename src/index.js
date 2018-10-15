@@ -18,49 +18,14 @@ const config = {
 
 firebase.initializeApp(config);
 
-// firebase.auth().signInAnonymously().catch(function(error) {
-//   // Handle Errors here.
-//   console.log(error);
-//   var errorCode = error.code;
-//   var errorMessage = error.message;
-//   // ...
-// });
-
-// let anonymousUser = null;
-// var isUserSignedIn = false;
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    // if(user.isAnonymous){
-    //   anonymousUser = firebase.auth().currentUser;
-    // }
-    // isUserSignedIn = true;
-    // console.log(isUserSignedIn);
     UserActionCreator.signInUser(user);
-  } else {
-    // firebase.auth().signInAnonymously().catch(function(error) {
-    //   // Handle Errors here.
-    //   console.log(error);
-    //   var errorCode = error.code;
-    //   var errorMessage = error.message;
-    //   // ...
-    // });
-    // anonymousUser = firebase.auth().currentUser;
-    // UserActionCreator.signInUser(anonymousUser);
-    console.log("Użytkownik niezalogowany");
   }
 });
-// firebase.auth().onAuthStateChanged(user => {
-//   console.log("user", user)
-//   if(user.isAnonymous){
-//     anonymousUser = user;
-//   }
-// })
-
 
 const uiConfig = {
-    // autoUpgradeAnonymousUsers: true,
     signInFlow: 'popup',
-    // signInSuccessUrl: '/signedIn',
     signInSuccessUrl: '/profile',
     signInOptions: [
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -88,28 +53,9 @@ const uiConfig = {
                     // and that this is given enough time to complete before
                     // redirection.
                     return firebase.auth().signInWithCredential(cred);
-                })
-                .then(function(user) {
-                    // Original Anonymous Auth instance now has the new user.
-                    // return app.database().ref('users/' + user.uid).set(data);
-                })
-                .then(function() {
-                    // Delete anonymnous user.
-                    // return anonymousUser.delete();
-                })
-                .then(function() {
-                    // Clear data in case a new user signs in, and the state change
-                    // triggers.
-                    // data = null;
-                    // FirebaseUI will reset and the UI cleared when this promise
-                    // resolves.
-                    // signInSuccessWithAuthResult will not run. Successful sign-in
-                    // logic has to be run explicitly.
-                    window.location.assign('<url-to-redirect-to-on-success>');
-                });
+            })
         }
     }
 }
 
-// ReactDOM.render(<App uiConfig={uiConfig} anonymousUser={anonymousUser} />, document.getElementById('app'));
 ReactDOM.render(<App uiConfig={uiConfig} />, document.getElementById('app'));

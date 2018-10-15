@@ -73,7 +73,6 @@ class Header extends React.Component{
                 <RegisterPlanner />
                 <Login 
                     uiConfig = {this.props.uiConfig}
-                    // anonymousUser = {this.props.anonymousUser}
                 />
             </nav>
         );
@@ -103,9 +102,7 @@ class Header extends React.Component{
     }
 
     generateHeader(){
-        // if(this.state.user !== null && !this.state.user.isAnonymous){
-            console.log(UserStore.getUser());
-        if(UserStore.getUser() !== null){
+        if(UserStore.getUser() !== null && UserStore.getUser().emailVerified){
             return this.generateNavigationForSignedInUser();
         }
         else{
@@ -118,41 +115,6 @@ class Header extends React.Component{
             this.generateHeader()
         );
     }
-
-    // render() {
-    //     return (
-    //         <nav className="navbar navbar-expand-lg navbar-light">
-    //             <a className="navbar-brand" href="#">Plan Your Visit</a>
-    //             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    //                 <span className="navbar-toggler-icon"></span>
-    //             </button>
-    //             <div className="collapse navbar-collapse" id="navbarNavDropdown">
-    //                 <ul className="navbar-nav mr-auto">
-    //                 </ul>
-    //                 <ul className="navbar-nav">
-    //                     <li className="nav-item dropdown">
-    //                         <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    //                             Zarejestruj się
-    //                         </a>
-    //                         <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-    //                             <a className="dropdown-item" href="#" data-toggle="modal" data-target="#registerVisitorModal">jako klient</a>
-    //                             <a className="dropdown-item" href="#" data-toggle="modal" data-target="#registerPlannerModal">jako przedsiębiorca</a>
-    //                         </div>
-    //                     </li>
-    //                     <li className="nav-item">
-    //                         <a className="nav-link" href="#" data-toggle="modal" data-target="#loginModal">Zaloguj się</a>
-    //                     </li>
-    //                 </ul>
-    //             </div>
-    //             <RegisterVisitor />
-    //             <RegisterPlanner />
-    //             <Login 
-    //                 uiConfig = {this.props.uiConfig}
-    //                 anonymousUser = {this.props.anonymousUser}
-    //             />
-    //         </nav>
-    //     );
-    // }
 }
 
 export default Header;

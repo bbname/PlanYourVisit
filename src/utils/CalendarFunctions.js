@@ -1,5 +1,5 @@
 import moment from 'moment';
-module.exports ={
+module.exports = {
     getMinDate: function(){
         let currentDate = moment().locale('pl');
         let lastWeekBeforeCurrentDate = currentDate.subtract(7, "days");

@@ -47,6 +47,19 @@ class RegisterActionCreator {
             actionType: AppConst.CLEAR_REGISTER_DATA
         });
     };
+    registerBtnClicked(){
+        AppDispatcher.dispatch({
+            actionType: AppConst.REGISTER_BTN_CLICKED
+        });
+    };
+    registerUser(isForPlanner){
+        AppDispatcher.dispatch({
+            actionType: AppConst.REGISTER_USER,
+            payload: {
+                isForPlanner: isForPlanner
+            }
+        });
+    };
 }
 
 export default new RegisterActionCreator();

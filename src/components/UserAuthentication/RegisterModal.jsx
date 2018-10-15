@@ -11,6 +11,11 @@ class RegisterModal extends React.Component{
         RegisterActionCreator.clearData();
     }
 
+    handleOnRegister = (e) => {
+        RegisterActionCreator.registerBtnClicked();
+        RegisterActionCreator.registerUser(this.props.isForPlanner);
+    }
+
     render() {
         return (
             <div className="modal fade" id={this.props.modalId} data-backdrop="static" tabIndex="-1" role="dialog" aria-labelledby={this.props.modalLabelName} aria-hidden="true">
@@ -30,7 +35,7 @@ class RegisterModal extends React.Component{
                   </div>
                   <div className="modal-footer">
                     <button type="button" className="btn btn-secondary" onClick={this.handleOnModalClose} data-dismiss="modal">Zamknij</button>
-                    <button type="button" className="btn btn-primary">Zarejestruj się</button>
+                    <button type="button" className="btn btn-primary" onClick={this.handleOnRegister}>Zarejestruj się</button>
                   </div>
                 </div>
               </div>

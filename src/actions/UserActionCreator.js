@@ -3,7 +3,6 @@ import AppConst from '../constants/AppConst'
 
 class UserActionCreator {
     signInUser(user){
-        console.log(user);
         AppDispatcher.dispatch({
             actionType: AppConst.SIGN_IN_USER,
             payload: {

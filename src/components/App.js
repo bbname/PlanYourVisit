@@ -15,12 +15,8 @@ class App extends Component {
                 <Grid role="main">
                     <Header 
                         uiConfig = {this.props.uiConfig}
-                        // anonymousUser = {this.props.anonymousUser}
                      />
                     <Row>
-                        {/* <Col md={12}>
-                            <h1>   </h1>
-                        </Col> */}
                         <HomePage />
                     </Row>
                     {/* <Calendar />
