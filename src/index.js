@@ -4,7 +4,6 @@ import App from './components/App';
 import firebase from 'firebase';
 import "firebase/auth";
 import UserActionCreator from "./actions/UserActionCreator";
-import LoginActionCreator from "./actions/LoginActionCreator"
   // Initialize Firebase
 
 const config = {
@@ -15,6 +14,7 @@ const config = {
     storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID
   };
+
 
 firebase.initializeApp(config);
 

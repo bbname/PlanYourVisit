@@ -54,3 +54,25 @@ visitType: {
       }
     }
   }
+
+
+
+ // aktualne ponizej
+
+  {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    "users": {
+        ".read": "true",
+        ".write": "true"
+    },
+    "visitors": {
+        ".read": "true",
+        ".write": "true"
+    },
+    "planners": {
+        ".read": "true",
+        ".write": "true"
+    }
+  }
+}

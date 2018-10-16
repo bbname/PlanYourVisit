@@ -43,7 +43,7 @@ class RegisterForm extends React.Component{
             isRegisterBtnClicked: RegisterStore.isRegisterBtnClicked(),
             email : RegisterStore.getEmail(),
             isEmailValid: RegisterStore.isEmailValid(),
-            password: RegisterStore.getPassword(), isPasswordValid: RegisterStore.isPasswordValid(),
+            password: RegisterStore.getPassword(), 
             isPasswordValid: RegisterStore.isPasswordValid(),
             passwordErrorMessage: RegisterStore.getPasswordErrorMessage(),
             passwordConfirmation: RegisterStore.getPasswordConfirmation(),

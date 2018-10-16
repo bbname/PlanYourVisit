@@ -60,6 +60,19 @@ class RegisterActionCreator {
             }
         });
     };
+    runFormValidation(isForPlanner){
+        AppDispatcher.dispatch({
+            actionType: AppConst.REGISTER_RUN_VALIDATION,
+            payload: {
+                isForPlanner: isForPlanner
+            }
+        });
+    }
+    checkRegistrationResult(){
+        AppDispatcher.dispatch({
+            actionType: AppConst.CHECK_REGISTRATION_RESULT
+        });
+    }
 }
 
 export default new RegisterActionCreator();

@@ -7,6 +7,7 @@ import Login from '../UserAuthentication/Login.jsx';
 import firebase from "firebase";
 import UserStore from "../../stores/UserStore";
 import UserActionCreator from "../../actions/UserActionCreator";
+import _ from "underscore";
 
 class Header extends React.Component{
     constructor(props){
@@ -37,7 +38,6 @@ class Header extends React.Component{
 
     handleOnSignedOutClick = (e) => {
         firebase.auth().signOut().then(function() {
-            console.log('Signed Out');
           }, function(error) {
             console.error('Sign Out Error', error);
           });
@@ -101,8 +101,24 @@ class Header extends React.Component{
         );
     }
 
+    isUserEmailVerifiedForPasswordEmailProvider(user){
+        if(user != null){
+            if(_.size(user.providerData) === 1){
+                if((user.providerData[0].providerId === "password" && user.emailVerified) ||
+                    user.providerData[0].providerId !== "password"){
+                        return true;
+                }
+            }
+            else if(_.size(user.providerData) > 1){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     generateHeader(){
-        if(UserStore.getUser() !== null && UserStore.getUser().emailVerified){
+        if(this.isUserEmailVerifiedForPasswordEmailProvider(UserStore.getUser())){
             return this.generateNavigationForSignedInUser();
         }
         else{

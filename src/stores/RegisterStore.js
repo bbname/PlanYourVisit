@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import AppDispatcher from "../dispatcher/AppDispatcher";
 import AppConst from "../constants/AppConst";
-import RegisterFunctions from "../utils/RegisterFunctions"
+import RegisterFunctions from "../utils/RegisterFunctions";
 import firebase from 'firebase';
 import "firebase/auth";
 
@@ -11,6 +11,10 @@ let _password = "";
 let _passwordConfirmation = "";
 let _name = "";
 let _companyName = "";
+let _isFormValid = null;
+let _isRegistrationSuccessFull = null;
+let _registrationErrorTitle = "Wystąpił nieoczekiwany błąd.";
+let _registrationErrorMessage = "Przepraszamy za problemy. Prosimy o kontakt na adres email: planyourvisit.contact@gmail.com";
 const ALL = "all";
 
 class RegisterStore extends EventEmitter {
@@ -43,15 +47,28 @@ class RegisterStore extends EventEmitter {
             }
             case AppConst.CLEAR_REGISTER_DATA: {
                 _isRegisterBtnClicked = false;
+                _isFormValid = null;
+                _isRegistrationSuccessFull = null;
                 _email = "";
                 _password = "";
                 _passwordConfirmation = "";
                 _name = "";
                 _companyName = "";
+                _registrationErrorTitle = "Wystąpił nieoczekiwany błąd.";
+                _registrationErrorMessage = "Przepraszamy za problemy. Prosimy o kontakt na adres email: planyourvisit.contact@gmail.com";
                 break;
             }
             case AppConst.REGISTER_BTN_CLICKED: {
                 _isRegisterBtnClicked = true;
+                break;
+            }
+            case AppConst.REGISTER_RUN_VALIDATION: {
+                if(_isRegisterBtnClicked === true){
+                    _isFormValid = this.isFormValid(action.payload.isForPlanner);    
+                }       
+                break;
+            }
+            case AppConst.CHECK_REGISTRATION_RESULT: {
                 break;
             }
             case AppConst.REGISTER_USER: {
@@ -59,77 +76,13 @@ class RegisterStore extends EventEmitter {
                     let isFormValid = this.isFormValid(action.payload.isForPlanner);
                     
                     if(isFormValid){
-                        // alert("tutaj nastapi rejestracja");
                         let user = null;
-                        firebase.auth().createUserWithEmailAndPassword(_email, _password)
-                        .then(function(firebaseUser){
-                            console.log("firebaseUser", firebaseUser);
-                            // console.log("User " + firebaseUser + " created successfully!");
+                        let self = this;
+                        firebase.auth().createUserWithEmailAndPassword(_email, _password).then(function(firebaseUser){
+                            console.log("firebaseUser",firebaseUser);
                             user = firebaseUser.user;
-
-
-                            // let ref = firebase.database().ref().child("users");
-                            // let data = {
-                            //     id: firebaseUser.uid,
-                            //     email: _email,
-                            //     password: _password,
-                            //     name: _name,
-                            // }
-
-                            // let ref = firebase.database().ref();
-                            // console.log("ref", ref);
-                            // let usersRef = ref.child('users');
-                            // console.log("usersRef", usersRef);
-                            // let userRef = usersRef.set(firebaseUser.user.uid);
-                            // console.log("userRef", userRef);
-                            // usersRef.child(firebaseUser.user.uid).set({
-                            //     id: data.id,
-                            //     email: data.email,
-                            //     password: data.password,
-                            //     name: data.password
-                            // });
-                            // console.log("userWithData", userWithData);
-
-
-                            // let userRef = usersRef.push(firebaseUser.user.uid);
-                            // console.log("userRef", userRef);
-                            // let userWithData = userRef.push({
-                            //     id: data.id,
-                            //     email: data.email,
-                            //     password: data.password,
-                            //     name: data.password
-                            // });
-                            // console.log("userWithData", userWithData);
-
-
-
-
-                            // let ref = firebase.database().ref("users/" + firebaseUser.user.uid)
-                            // .set(data)
-                            // .then(function(ref) {//use 'child' and 'set' combination to save data in your own generated key
-                            //     console.log("Saved");
-                            //     firebase.auth().onAuthStateChanged(function(user) {
-                            //         user.sendEmailVerification(); 
-                            //       });
-                            // }, function(error) {
-                            //     console.log(error); 
-                            // });
-
-
-
-                            // ref.child(user.uid).set(data)
-                            // .then(function(ref) {//use 'child' and 'set' combination to save data in your own generated key
-                            //     console.log("Saved");
-                            //     firebase.auth().onAuthStateChanged(function(user) {
-                            //         user.sendEmailVerification(); 
-                            //       });
-                            // }, function(error) {
-                            //     console.log(error); 
-                            // });
-
-                            // return firebaseUser;
-                        })
-                        .then(function(){
+                        }).then(function(){
+                            firebase.auth().languageCode = 'pl';
                             let userForUpdate = firebase.auth().currentUser;
                             userForUpdate.updateProfile({
                                 displayName: _name,
@@ -138,48 +91,45 @@ class RegisterStore extends EventEmitter {
                               }).catch(function(error) {
                                 // An error happened.
                               });
-                        })
-                        .then(function(){
-                            //console.log("beforeIf", user);
+                        }).then(function(){
                             if(user !== null){
-                                //console.log("beforeSet", user);
                                 firebase.database().ref('users/' + user.uid).set({
                                     id: user.uid,
                                     email: _email,
                                     password: _password,
                                     name: _name
                                 }).then(function(){
-                                    //console.log("beforeSend", user);
+                                    if(action.payload.isForPlanner){
+                                        firebase.database().ref('planners/' + user.uid).set({
+                                            id: user.uid,
+                                            companyName: _companyName
+                                        });
+                                    }
+                                    else{
+                                        firebase.database().ref('visitors/' + user.uid).set({
+                                            id: user.uid
+                                        });
+                                    }
+                                }).then(function(){
+                                    console.log("user", user);
                                     user.sendEmailVerification(); 
                                 });
+
+                                _isRegistrationSuccessFull = true;
                             }
-                        })
-                        .catch(function(error) {
+                        }).catch(function(error) {
                             // Handle Errors here.
                             var errorCode = error.code;
                             var errorMessage = error.message;
+                            _isRegistrationSuccessFull = false;
+                            if(errorCode === "auth/email-already-in-use"){
+                                _registrationErrorTitle = "Podany adres e-mail jest już w użyciu.";
+                                _registrationErrorMessage = "Podany przez Ciebie adres e-mail jest już używany przez kogoś innego.";
+                            }
                             // ...
+                          }).then(function(){
+                              self.emitChange(ALL);
                           });
-
-                        // firebase.auth().onAuthStateChanged(function(user) {
-                        //     let ref = firebase.database().ref();
-                        //     console.log("ref", ref);
-                        //     let usersRef = ref.child('users');
-                        //     console.log("user", user);
-                        //     let userRef = usersRef.set(user.uid);
-                        //     console.log("userRef", userRef);
-                        //     firebase.database().ref('users/' + user.uid).set({
-                        //         id: user.uid,
-                        //         email: _email,
-                        //         password: _password,
-                        //         name: _name
-                        //     });
-                        //     console.log("beforeSend", user);
-                        //     user.sendEmailVerification(); 
-                        // });
-                    }
-                    else{
-                        alert("nie ma rejestracji w formsach jest update kolorkow");
                     }
                 }
             }
@@ -203,6 +153,22 @@ class RegisterStore extends EventEmitter {
 
     isRegisterBtnClicked(){
         return _isRegisterBtnClicked;
+    }
+
+    shouldShowSpinnerLoader(){
+        return _isFormValid;
+    }
+
+    isRegistrationSuccessFull(){
+        return _isRegistrationSuccessFull;
+    }
+
+    getRegistartionErrorTitle(){
+        return _registrationErrorTitle;
+    }
+    
+    getRegistartionErrorMessage(){
+        return _registrationErrorMessage;
     }
 
     getEmail(){
