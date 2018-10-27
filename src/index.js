@@ -4,17 +4,27 @@ import App from './components/App';
 import firebase from 'firebase';
 import "firebase/auth";
 import UserActionCreator from "./actions/UserActionCreator";
+import LoginActionCreator from "./actions/LoginActionCreator";
+
   // Initialize Firebase
 
-const config = {
-    apiKey: process.env.REACT_APP_FIREBASE_KEY,
-    authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE,
-    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID
-  };
+// const config = {
+//     apiKey: process.env.REACT_APP_FIREBASE_KEY,
+//     authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
+//     databaseURL: process.env.REACT_APP_FIREBASE_DATABASE,
+//     projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+//     storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+//     messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID
+//   };
 
+  const config = {
+  apiKey: "AIzaSyCfupxEiyKj6Tlb3Wob-RI28xvm4DBLrmw",
+  authDomain: "planyourvisit-265e4.firebaseapp.com",
+  databaseURL: "https://planyourvisit-265e4.firebaseio.com",
+  projectId: "planyourvisit-265e4",
+  storageBucket: "planyourvisit-265e4.appspot.com",
+  messagingSenderId: "497806565586"
+};
 
 firebase.initializeApp(config);
 
@@ -32,7 +42,37 @@ const uiConfig = {
       firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     ],
     callbacks: {
-        signInSuccessWithAuthResult: () => true,
+        // signInSuccessWithAuthResult: () => true,
+        signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+          console.log("authResult", authResult)
+          let user = authResult.user;
+          let credential = authResult.credential;
+          let isNewUser = authResult.additionalUserInfo.isNewUser;
+          let providerId = authResult.additionalUserInfo.providerId;
+          let operationType = authResult.operationType;
+          // Do something with the returned AuthResult.
+          // Return type determines whether we continue the redirect automatically
+          // or whether we leave that to developer to handle.
+          if(isNewUser){
+            firebase.auth().languageCode = 'pl';
+
+            if(user !== null){
+                firebase.database().ref('users/' + user.uid).set({
+                    id: user.uid,
+                    email: user.email,
+                    password: null,
+                    name: user.displayName
+                }).then(function(){
+                  firebase.database().ref('visitors/' + user.uid).set({
+                      userId: user.uid
+                  });
+                })
+            }
+          }
+
+          LoginActionCreator.closeLoginModal(true);
+          return false;
+        },
         signInFailure: (error) => {
             if (error.code != 'firebaseui/anonymous-upgrade-merge-conflict') {
                 return Promise.resolve();

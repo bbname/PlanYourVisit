@@ -88,6 +88,10 @@ class LoginStore extends EventEmitter {
                         }).catch(function(error) {
                         // An error happened.
                         _isForgetPasswordSendSuccessFull = false;
+                        if(error.code === "auth/user-not-found"){
+                            _forgetPasswordErrorTitle = "Nie znaleziono użytkownika.";
+                            _forgetPasswordErrorMessage = "Na podane przez Ciebie dane nie istnieje żaden użytkownik.";
+                        }
                         }).then(function(){
                             self.emitChange(ALL);
                         });

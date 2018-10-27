@@ -76,3 +76,44 @@ visitType: {
     }
   }
 }
+
+
+
+
+
+// orignal rules for storage
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+
+
+
+current rules for a realtime database
+
+{
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "true",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "visitors": {
+      "$uid": {
+        ".read": "true",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "planners": {
+      "$uid": {
+        ".read": "true",
+        ".write": "$uid === auth.uid"
+      }
+    }
+  }
+}

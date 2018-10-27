@@ -97,17 +97,19 @@ class RegisterStore extends EventEmitter {
                                     id: user.uid,
                                     email: _email,
                                     password: _password,
-                                    name: _name
+                                    name: _name,
+                                    isPlanner: action.payload.isForPlanner
                                 }).then(function(){
                                     if(action.payload.isForPlanner){
                                         firebase.database().ref('planners/' + user.uid).set({
-                                            id: user.uid,
-                                            companyName: _companyName
+                                            userId: user.uid,
+                                            companyName: _companyName,
+                                            userName: _name
                                         });
                                     }
                                     else{
                                         firebase.database().ref('visitors/' + user.uid).set({
-                                            id: user.uid
+                                            userId: user.uid
                                         });
                                     }
                                 }).then(function(){
