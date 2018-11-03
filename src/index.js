@@ -8,29 +8,21 @@ import LoginActionCreator from "./actions/LoginActionCreator";
 
   // Initialize Firebase
 
-// const config = {
-//     apiKey: process.env.REACT_APP_FIREBASE_KEY,
-//     authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
-//     databaseURL: process.env.REACT_APP_FIREBASE_DATABASE,
-//     projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-//     storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-//     messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID
-//   };
-
-  const config = {
-  apiKey: "AIzaSyCfupxEiyKj6Tlb3Wob-RI28xvm4DBLrmw",
-  authDomain: "planyourvisit-265e4.firebaseapp.com",
-  databaseURL: "https://planyourvisit-265e4.firebaseio.com",
-  projectId: "planyourvisit-265e4",
-  storageBucket: "planyourvisit-265e4.appspot.com",
-  messagingSenderId: "497806565586"
-};
+const config = {
+    apiKey: process.env.REACT_APP_FIREBASE_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_DOMAIN,
+    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID
+  };
 
 firebase.initializeApp(config);
 
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     UserActionCreator.signInUser(user);
+    UserActionCreator.isCurrentUserPlanner();
   }
 });
 

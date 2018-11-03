@@ -1,17 +1,49 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import AppConst from '../constants/AppConst';
 import ProfileFunctions from '../utils/ProfileFunctions';
+import firebase from 'firebase';
+import "firebase/auth";
 
 class ProfileActionCreator {
-    setUser(){
-        ProfileFunctions.getUserDatabase().then(function (user){
+    setPlanner(plannerId){
+        ProfileFunctions.getPlannerFromDatabase(plannerId).then(function (planner){
+            AppDispatcher.dispatch({
+                actionType: AppConst.SET_PLANNER_PAGE_INFO,
+                payload: {
+                    planner: planner
+                }
+            });
+        });
+    };
+    setUser(user){
+      if(user === undefined || user === null){
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                return firebase.database().ref('/users/' + user.uid).once('value').then(function(snapshot) {
+                    let user = snapshot.val();
+                    return user;
+                  }).then(function(userFromDb){
+                    AppDispatcher.dispatch({
+                        actionType: AppConst.SET_PROFILE_USER,
+                        payload: {
+                            user: userFromDb
+                        }
+                    });
+                  });
+              } 
+            else {
+                return null;
+              }
+          });
+        }
+        else{
             AppDispatcher.dispatch({
                 actionType: AppConst.SET_PROFILE_USER,
                 payload: {
                     user: user
                 }
             });
-        });
+        }
     };
     setImage(image){
         AppDispatcher.dispatch({

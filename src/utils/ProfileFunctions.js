@@ -2,6 +2,19 @@ import firebase from 'firebase';
 import "firebase/auth";
 
 module.exports = {
+    isCurrentUserPlanner: function(){
+        return firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                return firebase.database().ref('/users/' + user.uid).once('value').then(function(snapshot) {
+                    let user = snapshot.val();
+                    return user.isPlanner;
+                  });
+              } 
+            else {
+                return null;
+              }
+          });
+    },
     getUserFirebase: function(){
         let user = firebase.auth().currentUser;
         return user;
@@ -9,7 +22,22 @@ module.exports = {
     getUserDatabase: function(){
         let user = firebase.auth().currentUser;
 
-        if(user !== null){
+        if(user === null){
+            return firebase.auth().onAuthStateChanged(user => {
+                if (user) {
+                    return firebase.database().ref('/users/' + user.uid).once('value').then(function(snapshot) {
+                        let user = snapshot.val();
+                        return user;
+                      }).then(function(x){
+                          return x;
+                      });
+                  } 
+                else {
+                    return null;
+                  }
+              });
+        }
+        else{
             return firebase.database().ref('/users/' + user.uid).once('value').then(function(snapshot) {
                 let user = snapshot.val();
                 return user;
@@ -54,6 +82,16 @@ module.exports = {
             });
             return url;
           });
+        });
+    },
+    getPlannerFromDatabase: function(plannerId){
+        return firebase.database().ref('/planners/' + plannerId).once('value').then(function(snapshot){
+            return snapshot.val();
+        });
+    },
+    getUserFromDatabase: function(userId){
+        return firebase.database().ref('/users/' + userId).once('value').then(function(snapshot){
+            return snapshot.val();
         });
     }
 };

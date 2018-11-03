@@ -5,7 +5,8 @@ module.exports = {
     entry: './src/index.js',
     output: {
         path: path.join(__dirname, '/dist'),
-        filename: 'index_bundle.js'
+        filename: 'index_bundle.js',
+        publicPath: '/'
     },
     devtool: "#eval-source-map",
     module: {
@@ -28,6 +29,9 @@ module.exports = {
                 loader: 'url-loader?limit=8192' 
             }
         ]
+    },
+    devServer: {
+        historyApiFallback: true,
     },
     plugins: [
         new HtmlWebpackPlugin({

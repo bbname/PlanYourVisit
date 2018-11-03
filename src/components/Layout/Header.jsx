@@ -7,15 +7,8 @@ import Login from '../UserAuthentication/Login.jsx';
 import firebase from "firebase";
 import UserStore from "../../stores/UserStore";
 import UserActionCreator from "../../actions/UserActionCreator";
-
 import _ from "underscore";
-// import {
-//     BrowserRouter as Router,
-//     Route,
-//     Link
-//   } from 'react-router-dom';
-// import Profile from "../Profile.jsx"
-// import HomePage from "../HomePage.jsx"
+import { Link } from 'react-router-dom';
 
 class Header extends React.Component{
     constructor(props){
@@ -23,6 +16,7 @@ class Header extends React.Component{
 
         this.state = {
             user: UserStore.getUser(),
+            isPlanner: UserStore.isPlanner()
         }
     }
 
@@ -37,12 +31,9 @@ class Header extends React.Component{
     _onChange = () => {
         this.setState({
             user : UserStore.getUser(),
+            isPlanner: UserStore.isPlanner()
         });
     }
-
-    // handleOnProfileClick = (e) => {
-    //     alert("Strona z profilem.");
-    // }
 
     handleOnSignedOutClick = (e) => {
         firebase.auth().signOut().then(function() {
@@ -56,7 +47,8 @@ class Header extends React.Component{
     generateNavigationForSignedOutUser(){
         return (
                 <nav className="navbar navbar-expand-lg navbar-light">
-                    {this.props.homePage}
+                    {/* {this.props.homePage} */}
+                    <Link className="navbar-brand" to="/">Plan Your Visit</Link>
                     {/* <a className="navbar-brand"><Link to="/">Plan Your Visit</Link></a> */}
                     {/* <a className="navbar-brand" href="#">Plan Your Visit</a> */}
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +86,13 @@ class Header extends React.Component{
     generateNavigationForSignedInUser(){
         return (
                 <nav className="navbar navbar-expand-lg navbar-light">
-                    {this.props.homePage}
+                    {/* {this.props.homePage} */}
+                    <Link className="navbar-brand" to="/">Plan Your Visit</Link>
+                    <Link className="nav-link nav-link-item" to="/visits"><i className="fa fa-book" aria-hidden="true"></i> Wizyty</Link>
+                    {this.generatePlannerLink()}
+                    {this.generateDailyPlanLink()}
+                    {this.generateTimeRangeLink()}
+                    {this.generateVisitTypeLink()}
                     {/* <a className="navbar-brand"><Link to="/">Plan Your Visit</Link></a> */}
                     {/* <a className="navbar-brand" href="#">Plan Your Visit</a> */}
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,7 +103,8 @@ class Header extends React.Component{
                         </ul>
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                {this.props.profile}
+                                {/* {this.props.profile} */}
+                                <Link className="nav-link" to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link>
                                 {/* <a className="nav-link" href="#" onClick={this.handleOnProfileClick}><i className="fa fa-user" aria-hidden="true"></i> Profil</a> */}
                                 {/* <a className="nav-link" onClick={this.handleOnProfileClick}><Link to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link></a> */}
                             </li>
@@ -116,6 +115,30 @@ class Header extends React.Component{
                     </div>
                 </nav>
         );
+    }
+
+    generatePlannerLink(){
+        if(this.state.isPlanner === true){
+            return <Link className="nav-link nav-link-item" to="/planner"><i className="fa fa-calendar-alt" aria-hidden="true"></i> Planer</Link>;
+        }
+    }
+
+    generateDailyPlanLink(){
+        if(this.state.isPlanner === true){
+            return <Link className="nav-link nav-link-item" to="/daily-plan"><i className="fas fa-calendar-times" aria-hidden="true"></i> Plany dni</Link>;
+        }
+    }
+
+    generateTimeRangeLink(){
+        if(this.state.isPlanner === true){
+            return <Link className="nav-link nav-link-item" to="/time-range"><i className="fas fa-clock" aria-hidden="true"></i> Zakresy czasowe</Link>;
+        }
+    }
+
+    generateVisitTypeLink(){
+        if(this.state.isPlanner === true){
+            return <Link className="nav-link nav-link-item" to="/visit-type"><i className="fas fa-clipboard" aria-hidden="true"></i> Typy wizyt</Link>;
+        }
     }
 
     isUserEmailVerifiedForPasswordEmailProvider(user){

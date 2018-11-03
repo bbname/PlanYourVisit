@@ -35,6 +35,29 @@ class ProfileStore extends EventEmitter {
 
     dispatcherCallback(action){
         switch(action.actionType) {
+            case AppConst.SET_PLANNER_PAGE_INFO: {
+                let self = this;
+                let planner = action.payload.planner;
+
+                if(planner != null){
+                    //_email = planner.email;
+                    _name = planner.userName;
+                    _city = planner.city;
+                    _address = planner.address;
+                    //_phone = planner.phone;
+                    _imageUrl = planner.imageUrl;
+                    _companyName = planner.companyName;
+
+                    ProfileFunctions.getUserFromDatabase(planner.userId).then(function(user){
+                        _email = user.email;
+                        _phone = user.phone;
+                        self.emitChange(ALL);
+                    });
+
+                    self.emitChange(ALL);
+                }
+                break;
+            }
             case AppConst.SET_PROFILE_USER: {
                 let self = this;
                 let user = action.payload.user;

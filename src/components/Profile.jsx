@@ -38,8 +38,8 @@ class Profile extends React.Component{
     }
 
     componentWillMount() {
-        ProfileActionCreator.setUser();
         ProfileStore.addChangeListener(this._onChange);
+        ProfileActionCreator.setUser();
         // UserStore.addChangeListener(this._onChange);
     }
  

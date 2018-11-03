@@ -5,47 +5,10 @@ import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
 import "./styles/search-style.css"
 import SearchActionCreator from "../actions/SearchActionCreator";
 import SearchStore from "../stores/SearchStore";
+import {
+    Link
+  } from 'react-router-dom';
 
-// const people = [
-//     {
-//       first: 'Charlie',
-//       last: 'Brown',
-//       twitter: 'dancounsell'
-//     },
-//     {
-//       first: 'Charlotte',
-//       last: 'White',
-//       twitter: 'mtnmissy'
-//     },
-//     {
-//       first: 'Chloe',
-//       last: 'Jones',
-//       twitter: 'ladylexy'
-//     },
-//     {
-//       first: 'Cooper',
-//       last: 'King',
-//       twitter: 'steveodom'
-//     }
-//   ];
-  
-  // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
-//   function escapeRegexCharacters(str) {
-//     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-//   }
-  
-//   function getSuggestions(value) {
-//     const escapedValue = escapeRegexCharacters(value.trim());
-    
-//     if (escapedValue === '') {
-//       return [];
-//     }
-  
-//     const regex = new RegExp('\\b' + escapedValue, 'i');
-    
-//     return people.filter(person => regex.test(getSuggestionValue(person)));
-//   }
-  
 function getSpecialistSuggestionValue(suggestion) {
     return `${suggestion.name}`;
 }
@@ -58,23 +21,46 @@ function renderSpecialistSuggestion(suggestion, { query }) {
     const suggestionText = `${suggestion.name}`;
     const matches = AutosuggestHighlightMatch(suggestionText, query);
     const parts = AutosuggestHighlightParse(suggestionText, matches);
-  
+    const hiddenLinkStyle = {
+        textDecoration: "none",
+        color: "#495057"
+    }
+
     return (
-      <span className={'suggestion-content'}>
-        <img className="plannerImage" src={suggestion.imageUrl} alt="..." />
-        <span className="name">
-          {
-            parts.map((part, index) => {
-              const className = part.highlight ? 'highlight' : null;
+        <Link to={'/specialist/'+ suggestion.uid} style={hiddenLinkStyle}>
+            <span className={'suggestion-content'}>
+                <img className="plannerImage" src={suggestion.imageUrl} alt="..." />
+                <span className="name">
+                    {
+                    parts.map((part, index) => {
+                        const className = part.highlight ? 'highlight' : null;
+            
+                        return (
+                        <span className={className} key={index}>{part.text}</span>
+                        );
+                    })
+                    }
+                </span>
+            </span>
+        </Link>
+      );
+
+    // return (
+    //   <span className={'suggestion-content'}>
+    //     <img className="plannerImage" src={suggestion.imageUrl} alt="..." />
+    //     <span className="name">
+    //       {
+    //         parts.map((part, index) => {
+    //           const className = part.highlight ? 'highlight' : null;
   
-              return (
-                <span className={className} key={index}>{part.text}</span>
-              );
-            })
-          }
-        </span>
-      </span>
-    );
+    //           return (
+    //             <span className={className} key={index}>{part.text}</span>
+    //           );
+    //         })
+    //       }
+    //     </span>
+    //   </span>
+    // );
 }
 
 function renderCitySuggestion(suggestion, { query }) {
@@ -156,9 +142,9 @@ class Search extends React.Component{
         //SearchActionCreator.clearCitiesData();
     };
 
-    onSpecialistSuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
-        console.log("suggestion", suggestion);
-    };
+    // onSpecialistSuggestionSelected = (event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+    //     console.log("suggestion", suggestion);
+    // };
 
     render() {
         const nameStyle = {
@@ -187,7 +173,7 @@ class Search extends React.Component{
                 <div className="row">
                     <div style={nameStyle} className="col-12 col-sm-5">
                         <Autosuggest 
-                            onSuggestionSelected={this.onSpecialistSuggestionSelected}
+                            // onSuggestionSelected={this.onSpecialistSuggestionSelected}
                             suggestions={this.state.specialistSuggestions}
                             onSuggestionsFetchRequested={this.onSpecialistSuggestionsFetchRequested}
                             onSuggestionsClearRequested={this.onSpecialistSuggestionsClearRequested}
@@ -219,190 +205,6 @@ class Search extends React.Component{
             </div>
         );
     }
-
-
-    // render() {
-    //     const nameStyle = {
-    //         paddingRight: "5px"
-    //     };
-    //     const cityStyle = {
-    //         paddingLeft: "5px",
-    //         paddingRight: "5px"
-    //     };
-    //     const searchStyle = {
-    //         paddingLeft: "5px"
-    //     };
-
-    //     return (
-    //         <div className="container">
-    //             <div className="row">
-    //                 <div style={nameStyle} className="col-12 col-sm-5">
-    //                     <input className="form-control" type="text" placeholder="Nazwa firmy lub specjalisty" id="name-company-name" />
-    //                 </div>
-    //                 <div style={cityStyle} className="col-12 col-sm-5">
-    //                     <input className="form-control" type="text" placeholder="Miasto" id="city" />
-    //                 </div>
-    //                 <div style={searchStyle} className="col-12 col-sm-2">
-    //                     <button type="button" className="btn btn-primary">
-    //                         <i className="fas fa-search"></i> Szukaj
-    //                     </button>
-    //                 </div>
-    //             </div>
-    //         </div>
-    //     );
-    // }
 }
 
 export default Search;
-
-
-
-
-// const people = [
-//     {
-//       first: 'Charlie',
-//       last: 'Brown',
-//       twitter: 'dancounsell'
-//     },
-//     {
-//       first: 'Charlotte',
-//       last: 'White',
-//       twitter: 'mtnmissy'
-//     },
-//     {
-//       first: 'Chloe',
-//       last: 'Jones',
-//       twitter: 'ladylexy'
-//     },
-//     {
-//       first: 'Cooper',
-//       last: 'King',
-//       twitter: 'steveodom'
-//     }
-//   ];
-  
-//   // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
-//   function escapeRegexCharacters(str) {
-//     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-//   }
-  
-//   function getSuggestions(value) {
-//     const escapedValue = escapeRegexCharacters(value.trim());
-    
-//     if (escapedValue === '') {
-//       return [];
-//     }
-  
-//     const regex = new RegExp('\\b' + escapedValue, 'i');
-    
-//     return people.filter(person => regex.test(getSuggestionValue(person)));
-//   }
-  
-//   function getSuggestionValue(suggestion) {
-//     return `${suggestion.first} ${suggestion.last}`;
-//   }
-  
-//   function renderSuggestion(suggestion, { query }) {
-//     const suggestionText = `${suggestion.first} ${suggestion.last}`;
-//     const matches = AutosuggestHighlightMatch(suggestionText, query);
-//     const parts = AutosuggestHighlightParse(suggestionText, matches);
-  
-//     return (
-//       <span className={'suggestion-content ' + suggestion.twitter}>
-//         <span className="name">
-//           {
-//             parts.map((part, index) => {
-//               const className = part.highlight ? 'highlight' : null;
-  
-//               return (
-//                 <span className={className} key={index}>{part.text}</span>
-//               );
-//             })
-//           }
-//         </span>
-//       </span>
-//     );
-//   }
-
-// class Search extends React.Component{
-//     constructor(props){
-//         super(props);
-
-// this.state = {
-//       value: '',
-//       suggestions: [] 
-//     }  
-//     }
-
-//     onChange = (event, { newValue, method }) => {
-//         this.setState({
-//           value: newValue
-//         });
-//       };
-      
-//       onSuggestionsFetchRequested = ({ value }) => {
-//         this.setState({
-//           suggestions: getSuggestions(value)
-//         });
-//       };
-    
-//       onSuggestionsClearRequested = () => {
-//         this.setState({
-//           suggestions: []
-//         });
-//       };
-
-//     render() {
-//         const { value, suggestions } = this.state;
-//         const inputProps = {
-//           placeholder: "Type 'c'",
-//           value,
-//           onChange: this.onChange
-//         };
-    
-//         return (
-//           <Autosuggest 
-//             class="form-control"
-//             suggestions={suggestions}
-//             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-//             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-//             getSuggestionValue={getSuggestionValue}
-//             renderSuggestion={renderSuggestion}
-//             inputProps={inputProps} />
-//         );
-//     }
-// }
-
-//     // render() {
-//     //     const nameStyle = {
-//     //         paddingRight: "5px"
-//     //     };
-//     //     const cityStyle = {
-//     //         paddingLeft: "5px",
-//     //         paddingRight: "5px"
-//     //     };
-//     //     const searchStyle = {
-//     //         paddingLeft: "5px"
-//     //     };
-
-//     //     return (
-//     //         <div className="container">
-//     //             <div className="row">
-//     //                 <div style={nameStyle} className="col-12 col-sm-5">
-//     //                     <input className="form-control" type="text" placeholder="Nazwa firmy lub specjalisty" id="name-company-name" />
-//     //                 </div>
-//     //                 <div style={cityStyle} className="col-12 col-sm-5">
-//     //                     <input className="form-control" type="text" placeholder="Miasto" id="city" />
-//     //                 </div>
-//     //                 <div style={searchStyle} className="col-12 col-sm-2">
-//     //                     <button type="button" className="btn btn-primary">
-//     //                         <i className="fas fa-search"></i> Szukaj
-//     //                     </button>
-//     //                 </div>
-//     //             </div>
-//     //         </div>
-//     //     );
-//     // }
-// // }
-
-// export default Search;

@@ -3,6 +3,7 @@ import AppDispatcher from "../dispatcher/AppDispatcher";
 import AppConst from "../constants/AppConst";
 
 let _user = null;
+let _isPlanner = null;
 const ALL = "all";
 
 class UserStore extends EventEmitter {
@@ -19,6 +20,11 @@ class UserStore extends EventEmitter {
             }
             case AppConst.SIGN_OUT_USER: {
                 _user = null;
+                _isPlanner = null;
+                break;
+            }
+            case AppConst.IS_CURRENT_USER_PLANNER: {
+                _isPlanner = action.payload.isPlanner;
                 break;
             }
           }
@@ -41,6 +47,10 @@ class UserStore extends EventEmitter {
 
     getUser(){
         return _user;
+    }
+
+    isPlanner(){
+        return _isPlanner;
     }
 }
 

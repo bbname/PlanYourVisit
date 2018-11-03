@@ -14,6 +14,11 @@ import {
     Link
   } from 'react-router-dom';
 import Profile from "./Profile.jsx";
+import SpecialistPage from "./SpecialistPage.jsx";
+import Planner from './Planner/Planner.jsx';
+import TimeRange from './Planner/TimeRange.jsx';
+import VisitType from './Planner/VisitType.jsx';
+import DailyPlan from './Planner/DailyPlan.jsx';
 
 class App extends Component {
     handleOnProfileClick = (e) => {
@@ -26,30 +31,13 @@ class App extends Component {
             <Router>
                 <div>
                 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossOrigin="anonymous"></link>
-                    {/* <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossOrigin="anonymous"></link>
-                    <Grid role="main">
-                        <Header 
-                            uiConfig = {this.props.uiConfig}
-                            // homePage = {<Link to="/"><a className="navbar-brand">Plan Your Visit</a></Link>}
-                            homePage = {<Link to="/">Plan Your Visit</Link>}
-                            // profile = {<Link to="/profile"><a className="nav-link" onClick={this.handleOnProfileClick}><i className="fa fa-user" aria-hidden="true"></i> Profil</a></Link>}
-                            profile = {<Link to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link>}
-
-                        />
-                        <Row>
-                            
-                        </Row>
-
-                    </Grid>
-                    <Footer /> */}
                     <Route exact path="/" render={matchProps => (
                         <div>
-                            {/* <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossOrigin="anonymous"></link> */}
                             <Grid role="main">
                                 <Header 
                                     uiConfig = {this.props.uiConfig}
-                                    homePage = {<Link className="navbar-brand" to="/">Plan Your Visit</Link>}
-                                    profile = {<Link className="nav-link" to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link>}
+                                    // homePage = {<Link className="navbar-brand" to="/">Plan Your Visit</Link>}
+                                    // profile = {<Link className="nav-link" to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link>}
                                 />
                                 <HomePage />
                             </Grid>
@@ -59,12 +47,11 @@ class App extends Component {
                     />
                     <Route path="/profile" render={matchProps => (
                         <div>
-                            {/* <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossOrigin="anonymous"></link> */}
                             <Grid role="main">
                                 <Header 
                                     uiConfig = {this.props.uiConfig}
-                                    homePage = {<Link className="navbar-brand" to="/">Plan Your Visit</Link>}
-                                    profile = {<Link className="nav-link" to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link>}
+                                    // homePage = {<Link className="navbar-brand" to="/">Plan Your Visit</Link>}
+                                    // profile = {<Link className="nav-link" to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link>}
                                 />
                                 <Profile />
                             </Grid>
@@ -72,45 +59,74 @@ class App extends Component {
                         </div>
                         )} 
                     />
+                    <Route path="/specialist/:id" render={matchProps => (
+                        <div>
+                            <Grid role="main">
+                                <Header 
+                                    uiConfig = {this.props.uiConfig}
+                                    // homePage = {<Link className="navbar-brand" to="/">Plan Your Visit</Link>}
+                                    // profile = {<Link className="nav-link" to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link>}
+                                />
+                                <SpecialistPage
+                                    plannerId = {matchProps.match.params.id}     
+                                />
+                            </Grid>
+                            <Footer />
+                        </div>
+                        )} 
+                    />
+                    <Route path="/planner" render={matchProps => (
+                        <div>
+                            <Grid role="main">
+                                <Header 
+                                    uiConfig = {this.props.uiConfig}
+                                />
+                                <Planner />
+                            </Grid>
+                            <Footer />
+                        </div>
+                        )} 
+                    />
+                    <Route path="/daily-plan" render={matchProps => (
+                        <div>
+                            <Grid role="main">
+                                <Header 
+                                    uiConfig = {this.props.uiConfig}
+                                />
+                                <DailyPlan />
+                            </Grid>
+                            <Footer />
+                        </div>
+                        )} 
+                    />
+                    <Route path="/time-range" render={matchProps => (
+                        <div>
+                            <Grid role="main">
+                                <Header 
+                                    uiConfig = {this.props.uiConfig}
+                                />
+                                <TimeRange />
+                            </Grid>
+                            <Footer />
+                        </div>
+                        )} 
+                    />
+                    <Route path="/visit-type" render={matchProps => (
+                        <div>
+                            <Grid role="main">
+                                <Header 
+                                    uiConfig = {this.props.uiConfig}
+                                />
+                                <VisitType />
+                            </Grid>
+                            <Footer />
+                        </div>
+                        )} 
+                    />
                 </div>
-
-                    {/* <Route exact path="/" component={HomePage} />
-                    <Route path="/profile" component={Profile} /> */}
             </Router>
         );
     }
-
-    // render() {
-    //     return (
-    //         <Router>
-    //             <div>
-    //                 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossOrigin="anonymous"></link>
-    //                 <Grid role="main">
-    //                     <Header 
-    //                         uiConfig = {this.props.uiConfig}
-    //                         // homePage = {<Link to="/"><a className="navbar-brand">Plan Your Visit</a></Link>}
-    //                         homePage = {<Link to="/">Plan Your Visit</Link>}
-    //                         // profile = {<Link to="/profile"><a className="nav-link" onClick={this.handleOnProfileClick}><i className="fa fa-user" aria-hidden="true"></i> Profil</a></Link>}
-    //                         profile = {<Link to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link>}
-
-    //                     />
-    //                     {/* <Row>
-    //                         <HomePage />
-    //                     </Row> */}
-    //                     {/* <Calendar />
-    //                     <CalendarGrid /> */}
-
-    //                 </Grid>
-    //                 <Footer />
-    //                 {/* <Route exact path="/" component={HomePage} />
-    //                 <Route path="/profile" component={Profile} /> */}
-    //                 <Route exact path="/" component={HomePage} />
-    //                 <Route path="/profile" component={Profile} />
-    //             </div>
-    //         </Router>
-
-    //     );
-    // }
 }
 
 export default App;

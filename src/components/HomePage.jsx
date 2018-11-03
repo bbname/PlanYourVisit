@@ -9,17 +9,6 @@ class HomePage extends React.Component{
 
 
     render() {
-        const nameStyle = {
-            paddingRight: "5px"
-        };
-        const cityStyle = {
-            paddingLeft: "5px",
-            paddingRight: "5px"
-        };
-        const searchStyle = {
-            paddingLeft: "5px"
-        };
-
         return (
             <div className="container" id="homepage-jumbotron">
                 <section className="jumbotron text-center">
