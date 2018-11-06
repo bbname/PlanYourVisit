@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./styles/calendarGrid-style.css";
 import _ from "underscore";
 // import CalendarGridColumnHoursStore from "../stores/CalendarGridColumnHoursStore"
-import CalendarGridColumnHour from "./CalendarGridColumnHour"
+import CalendarGridColumnHour from "./CalendarGridColumnHour.jsx"
 
 class CalendarGridColumnHours extends Component {
     constructor(props){

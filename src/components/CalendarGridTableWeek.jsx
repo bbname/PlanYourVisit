@@ -4,8 +4,8 @@ import { Carousel }  from 'react-responsive-carousel';
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles/calendarGrid-style.css";
 import {Row, Table} from "react-bootstrap";
-import CalendarGridColumnDay from "./CalendarGridColumnDay"
-import CalendarGridTableWeekStore from "../stores/CalendarGridTableWeekStore"
+import CalendarGridColumnDay from "./CalendarGridColumnDay.jsx";
+import CalendarGridTableWeekStore from "../stores/CalendarGridTableWeekStore";
 const nrOfHoursInDayColumn = 15;
 
 class CalendarGridTableWeek extends Component {
@@ -16,10 +16,10 @@ class CalendarGridTableWeek extends Component {
             plannerId: CalendarGridTableWeekStore.getPlannerId(),
             mondayDate: CalendarGridTableWeekStore.getMonday().date,
             mondayHourObjs: CalendarGridTableWeekStore.getMonday().hourObjs,
-            mondaySlides: getSlides(CalendarGridTableWeekStore.getMonday().hourObjs),
+            mondaySlides: this.getSlides(CalendarGridTableWeekStore.getMonday().hourObjs),
             tuesdayDate: CalendarGridTableWeekStore.getTuesday().date,
             tuesdayHourObjs: CalendarGridTableWeekStore.getTuesday().hourObjs,
-            tuesdaySlides: getSlides(CalendarGridTableWeekStore.getTuesday().hourObjs),
+            tuesdaySlides: this.getSlides(CalendarGridTableWeekStore.getTuesday().hourObjs),
             wednesdayDate: null,
             wednesdayHourObjs: null,
             wednesdaySlides: null,
@@ -39,11 +39,11 @@ class CalendarGridTableWeek extends Component {
     }
 
     componentWillMount() {
-        CalendarGridColumnDayStore.addChangeListener(this._onChange);
+        CalendarGridTableWeekStore.addChangeListener(this._onChange);
     }
  
     componentWillUnmount() {
-        CalendarGridColumnDayStore.removeChangeListener(this._onChange);
+        CalendarGridTableWeekStore.removeChangeListener(this._onChange);
     }
 
     _onChange = () => {

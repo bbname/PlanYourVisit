@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "./styles/calendarGrid-style.css";
 import {Row, Table} from "react-bootstrap";
 import _ from "underscore";
-import CalendarGridColumnHours from "./CalendarGridColumnHours"
+import CalendarGridColumnHours from "./CalendarGridColumnHours.jsx"
 
 class CalendarGridColumnDay extends Component {
     constructor(props){

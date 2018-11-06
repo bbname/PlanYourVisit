@@ -6,6 +6,8 @@ import CalendarStore from "../stores/CalendarStore";
 import "bootstrap/dist/css/bootstrap.css";
 import "./styles/calendar-style.css";
 import {Row, Col} from "react-bootstrap";
+import PlannerActionCreator from "../actions/PlannerActionCreator";
+import _ from 'underscore';
 
 class Calendar extends React.Component{
     constructor(props){
@@ -25,6 +27,11 @@ class Calendar extends React.Component{
     componentWillMount() {
         CalendarStore.addChangeListener(this._onChange);
     }
+
+    componentDidMount() {
+        PlannerActionCreator.setDatesFromCalendar(this.state.selectedDate); 
+        PlannerActionCreator.setPlansByDate(this.state.selectedDate); 
+    }
  
     componentWillUnmount() {
         CalendarStore.removeChangeListener(this._onChange);
@@ -34,11 +41,12 @@ class Calendar extends React.Component{
         this.setState({
             selectedDate : CalendarStore.getSelectedDate(),
             highlightDates: CalendarStore.getHighlightedDates()
-        })
+        });
     }
 
     handleOnDatePickerChange(date){
-        CalendarActionCreator.selectWeekByDayInCalendar(date, this.state.plannerId);        
+        CalendarActionCreator.selectWeekByDayInCalendar(date, this.state.plannerId); 
+        PlannerActionCreator.setPlansByDate(date); 
     }
 
     render() {

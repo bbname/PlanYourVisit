@@ -38,13 +38,13 @@ module.exports = {
         let currentdayOfWeekNr = selectedDate.day();
         let startDayOfWeekNr = 1;
         let endDayOfWeekNr = 6;
-        const datesToHighlight = [];
+        let datesToHighlight = [];
         // 0 nd
         // 1 pn
         // 6 sb
     
         if(currentdayOfWeekNr == 0){
-            for(let i = 6; i > 0; i--){
+            for(let i = 6; i > -1; i--){
                 let test = moment(selectedDate);
                 datesToHighlight.push(test.subtract(i, "days"));
             }
@@ -60,8 +60,15 @@ module.exports = {
                 }
             }
         }
-    
+
+        datesToHighlight = datesToHighlight.sort(function (lhs, rhs)  { return lhs > rhs ? 1 : lhs < rhs ? -1 : 0; });
         return datesToHighlight;
-    }
+    },
+    getDateFormatForDatbase: function(dateObj){
+        return dateObj.format("YYYY-MM-DD");
+    },
+    getDateMomentObjFromDatabaseFormat: function(dateString){
+        return moment(dateString, "YYYY-MM-DD");
+    },
 } 
 
