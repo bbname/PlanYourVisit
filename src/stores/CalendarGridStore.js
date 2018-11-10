@@ -3,10 +3,30 @@ import AppDispatcher from "../dispatcher/AppDispatcher";
 import AppConst from "../constants/AppConst";
 import CalendarFunctions from "../utils/CalendarFunctions"
 import moment from 'moment';
+import _ from 'underscore';
 
-let _selectedDate = moment();
-let _minDate = CalendarFunctions.getMinDate();
-let _highlightedDates = CalendarFunctions.getWholeWeekBySelectedDate(_selectedDate);
+let _monday = {};
+let _tuesday = {};
+let _wednesday = {};
+let _thursday = {};
+let _friday = {};
+let _saturday = {};
+let _sunday = {};
+// let _mondaySlides = [];
+// let _tuesdaySlides = [];
+// let _wednesdaySlides = [];
+// let _thursdaySlides = [];
+// let _fridaySlides = [];
+// let _saturdaySlides = [];
+// let _sundaySlides = [];
+let _mondaySlides = null;
+let _tuesdaySlides = null;
+let _wednesdaySlides = null;
+let _thursdaySlides = null;
+let _fridaySlides = null;
+let _saturdaySlides = null;
+let _sundaySlides = null;
+let _isAnySlideLoaded = false;
 const ALL = "all";
 
 class CalendarGridStore extends EventEmitter {
@@ -17,12 +37,97 @@ class CalendarGridStore extends EventEmitter {
 
     dispatcherCallback(action){
         switch(action.actionType) {
-            case AppConst.SELECT_WHOLE_WEEK_BY_DAY_IN_CALENDAR: {
-                this.setSelectedDate(action.payload.selectedDate);
-                this.setHighlightedDates(action.payload.selectedDate);
+            case AppConst.SET_SELECTED_WEEK_DATES: {
+                let weekDates = CalendarFunctions.getWholeWeekBySelectedDate(action.payload.selectedDate);
+                _monday.date = weekDates[0];
+                _tuesday.date = weekDates[1];
+                _wednesday.date = weekDates[2];
+                _thursday.date = weekDates[3];
+                _friday.date = weekDates[4];
+                _saturday.date = weekDates[5];
+                _sunday.date = weekDates[6];
                 break;
             }
-          }
+            case AppConst.PLANNER_SET_VISIT_DAYS_FROM_DATABASE: {
+                let visitDays = action.payload.visitDays;
+                let self = this;
+                _.each(visitDays, function(visitDay){
+                    self.actionForDayByKeyDay("mon", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("tue", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("wed", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("thu", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("fri", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("sat", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("sun", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                });
+                break;
+            }
+            case AppConst.SET_DAY_SLIDES: {
+                let slideDays = action.payload.slideDays;
+                let self = this;
+                _.each(slideDays, function(slideDay){
+                    self.actionForDayByKeyDay("mon", function(day){
+                        self.setSlideDay(day, slideDay);
+                    });
+                    self.actionForDayByKeyDay("tue", function(day){
+                        self.setSlideDay(day, slideDay);
+                    });
+                    self.actionForDayByKeyDay("wed", function(day){
+                        self.setSlideDay(day, slideDay);
+                    });
+                    self.actionForDayByKeyDay("thu", function(day){
+                        self.setSlideDay(day, slideDay);
+                    });
+                    self.actionForDayByKeyDay("fri", function(day){
+                        self.setSlideDay(day, slideDay);
+                    });
+                    self.actionForDayByKeyDay("sat", function(day){
+                        self.setSlideDay(day, slideDay);
+                    });
+                    self.actionForDayByKeyDay("sun", function(day){
+                        self.setSlideDay(day, slideDay);
+                    });
+                    // self.actionForDaySlideByKeyDay("mon", function(day){
+                    //     day = slideDay;
+                    //     // self.setSlideDay(day, slideDay);
+                    // });
+                    // self.actionForDaySlideByKeyDay("tue", function(day){
+                    //     self.setSlideDay(day, slideDay);
+                    // });
+                    // self.actionForDaySlideByKeyDay("wed", function(day){
+                    //     self.setSlideDay(day, slideDay);
+                    // });
+                    // self.actionForDaySlideByKeyDay("thu", function(day){
+                    //     self.setSlideDay(day, slideDay);
+                    // });
+                    // self.actionForDaySlideByKeyDay("fri", function(day){
+                    //     self.setSlideDay(day, slideDay);
+                    // });
+                    // self.actionForDaySlideByKeyDay("sat", function(day){
+                    //     self.setSlideDay(day, slideDay);
+                    // });
+                    // self.actionForDaySlideByKeyDay("sun", function(day){
+                    //     self.setSlideDay(day, slideDay);
+                    // });
+                });
+                _isAnySlideLoaded = true;
+                break;
+            }
+        }
 
         this.emitChange(ALL);
         return true;
@@ -40,41 +145,152 @@ class CalendarGridStore extends EventEmitter {
         this.removeListener(ALL, callback);
     }
 
-    // emitChange(eventName){
-    //     this.emit(eventName);
-    // }
-
-    // addChangeListener(eventName, callback){
-    //     this.on(eventName, callback);
-    // }
-
-    // removeChangeListener(eventName, callback){
-    //     this.removeListener(eventName, callback);
-    // }
-
-    getHighlightedDates(){
-        return _highlightedDates;
+    isAnySlideLoaded(){
+        return _isAnySlideLoaded;
     }
 
-    setHighlightedDates(selectedDate){
-        _highlightedDates = CalendarFunctions.getWholeWeekBySelectedDate(selectedDate);
+    getMonday(){
+        return _monday;
+    }
+    
+    getTuesday(){
+        return _tuesday;
     }
 
-    getSelectedDate(){
-        return _selectedDate;
+    getWednesday(){
+        return _wednesday;
     }
 
-    setSelectedDate(selectedDate){
-        _selectedDate = selectedDate;
+    getThursday(){
+        return _thursday;
     }
 
-    getMinDate(){
-        return _minDate;
+    getFriday(){
+        return _friday;
     }
 
-    setMinDate(minDate){
-        _minDate = minDate;
+    getSaturday(){
+        return _saturday;
     }
+
+    getSunday(){
+        return _sunday;
+    }
+
+    getMondaySlides(){
+        return _mondaySlides;
+    }
+    
+    getTuesdaySlides(){
+        return _tuesdaySlides;
+    }
+
+    getWednesdaySlides(){
+        return _wednesdaySlides;
+    }
+
+    getThursdaySlides(){
+        return _thursdaySlides;
+    }
+
+    getFridaySlides(){
+        return _fridaySlides;
+    }
+
+    getSaturdaySlides(){
+        return _saturdaySlides;
+    }
+
+    getSundaySlides(){
+        return _sundaySlides;
+    }
+
+    setSlideDay(day, slideDay){
+        if(slideDay.length > 0){
+            const date = slideDay[0].key.substring(0,10);
+            if(CalendarFunctions.getDateFormatForDatbase(day.date) === date){
+                day.slides = slideDay;
+            }
+        }
+        // if(CalendarFunctions.getDateFormatForDatbase(day.date) === slideDay.key){
+        //     day.slides = slideDay;
+        // }
+        // day = slideDay;
+        // day.push(slideDay);
+    }
+
+    setVisitDay(day, visitDay){
+        if(CalendarFunctions.getDateFormatForDatbase(day.date) === visitDay.date){
+            day.visitDay = visitDay;
+        }
+    }
+
+    actionForDaySlideByKeyDay(keyDay, callback){
+        switch (keyDay){
+            case "mon": {
+                callback(_mondaySlides);
+                break;
+            }
+            case "tue": {
+                callback(_tuesdaySlides);
+                break;
+            }
+            case "wed": {
+                callback(_wednesdaySlides);
+                break;
+            }
+            case "thu": {
+                callback(_thursdaySlides);
+                break;
+            }
+            case "fri": {
+                callback(_fridaySlides);
+                break;
+            }
+            case "sat": {
+                callback(_saturdaySlides);
+                break;
+            }
+            case "sun": {
+                callback(_sundaySlides);
+                break;
+            }
+        }
+    }
+
+    actionForDayByKeyDay(keyDay, callback){
+        switch (keyDay){
+            case "mon": {
+                callback(_monday);
+                break;
+            }
+            case "tue": {
+                callback(_tuesday);
+                break;
+            }
+            case "wed": {
+                callback(_wednesday);
+                break;
+            }
+            case "thu": {
+                callback(_thursday);
+                break;
+            }
+            case "fri": {
+                callback(_friday);
+                break;
+            }
+            case "sat": {
+                callback(_saturday);
+                break;
+            }
+            case "sun": {
+                callback(_sunday);
+                break;
+            }
+        }
+    }
+
 }
 
 export default new CalendarGridStore();

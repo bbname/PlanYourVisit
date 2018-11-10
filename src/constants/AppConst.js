@@ -1,4 +1,6 @@
 module.exports = {
+    SET_DAY_SLIDES: "SetDaySlides",
+    PLANNER_SET_VISIT_DAYS_FROM_DATABASE: "PlannerSetVisitDaysFromDatabase",
     PLANNER_SET_PLANS_FROM_DATABASE: "PlannerSetDatesFromDatabase",
     PLANNER_SET_DATES_FROM_CALENDAR: "PlannerSetDatesFromCalendar",
     PLANNER_SET_DAILY_PLANS: "PlannerSetDailyPlans",

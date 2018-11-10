@@ -31,6 +31,7 @@ class Calendar extends React.Component{
     componentDidMount() {
         PlannerActionCreator.setDatesFromCalendar(this.state.selectedDate); 
         PlannerActionCreator.setPlansByDate(this.state.selectedDate); 
+        PlannerActionCreator.setVisitsByDate(this.state.selectedDate); 
     }
  
     componentWillUnmount() {
@@ -47,6 +48,7 @@ class Calendar extends React.Component{
     handleOnDatePickerChange(date){
         CalendarActionCreator.selectWeekByDayInCalendar(date, this.state.plannerId); 
         PlannerActionCreator.setPlansByDate(date); 
+        PlannerActionCreator.setVisitsByDate(date); 
     }
 
     render() {

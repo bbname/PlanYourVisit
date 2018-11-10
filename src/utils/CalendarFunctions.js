@@ -64,11 +64,53 @@ module.exports = {
         datesToHighlight = datesToHighlight.sort(function (lhs, rhs)  { return lhs > rhs ? 1 : lhs < rhs ? -1 : 0; });
         return datesToHighlight;
     },
+    getHoursFormatForDatabase: function(dateObj){
+        return dateObj.format("HH:mm");
+    },
     getDateFormatForDatbase: function(dateObj){
         return dateObj.format("YYYY-MM-DD");
+    },
+    getDateWithHourMomentObjFromDatabaseFormat: function(dateString){
+        return moment(dateString, "YYYY-MM-DD HH:mm");
     },
     getDateMomentObjFromDatabaseFormat: function(dateString){
         return moment(dateString, "YYYY-MM-DD");
     },
+    getDateWithHoursMomentObjFromDatabaseFormats: function(dateString, hourString){
+        let date = dateString + " " + hourString;
+        return moment(date, "YYYY-MM-DD HH:mm");
+    },
+    generateStringDatesForTimeRangeHours: function(stringDate, stringTimeFrom, stringTimeTo, intTimeStep){
+        let dates = [];
+        let begin = this.getDateWithHoursMomentObjFromDatabaseFormats(stringDate, stringTimeFrom);
+        let end = this.getDateWithHoursMomentObjFromDatabaseFormats(stringDate, stringTimeTo);
+
+        let forCheck = moment(begin);
+        begin.subtract(intTimeStep, 'minutes');
+
+        while(!forCheck.isAfter(end)){
+            forCheck.add(intTimeStep, 'minutes');
+            begin.add(intTimeStep, 'minutes');
+            dates.push(begin.format("YYYY-MM-DD HH:mm"));
+        }
+
+        return dates;
+    },
+    generateMomentDatesForTimeRangeHours: function(stringDate, stringTimeFrom, stringTimeTo, intTimeStep){
+        let dates = [];
+        let begin = this.getDateWithHoursMomentObjFromDatabaseFormats(stringDate, stringTimeFrom);
+        let end = this.getDateWithHoursMomentObjFromDatabaseFormats(stringDate, stringTimeTo);
+
+        let forCheck = moment(begin);
+        begin.subtract(intTimeStep, 'minutes');
+
+        while(!forCheck.isAfter(end)){
+            forCheck.add(intTimeStep, 'minutes');
+            begin.add(intTimeStep, 'minutes');
+            dates.push(moment(begin));
+        }
+
+        return dates;
+    }
 } 
 

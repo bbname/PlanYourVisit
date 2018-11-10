@@ -4,6 +4,7 @@ import firebase from 'firebase';
 import "firebase/auth";
 import CalendarFunctions from "../utils/CalendarFunctions";
 import Planner from "../dataProcessor/Planner";
+import CalendarGridActionCreator from "./CalendarGridActionCreator";
 
 class PlannerActionCreator {
     // setDatesFromCalendar(monday, tuesday, wednesday, thursday, friday, saturday, sunday){
@@ -76,6 +77,7 @@ class PlannerActionCreator {
             // });
         }).then(function(){
             self.setPlansByDate(day.date);
+            self.setVisitsByDate(day.date);
         });
     };
     createBtnClicked(day){
@@ -97,6 +99,7 @@ class PlannerActionCreator {
         })
         .then(function(){
             self.setPlansByDate(day.date);
+            self.setVisitsByDate(day.date);
         });
     };
     saveBtnClicked(day){
@@ -115,6 +118,7 @@ class PlannerActionCreator {
             });
         }).then(function(){
             self.setPlansByDate(day.date);
+            self.setVisitsByDate(day.date);
         });
     }
     setPlansByDate(selectedDate){
@@ -146,16 +150,25 @@ class PlannerActionCreator {
             }
         });
     };
-
-    // };
-    // setSelectedTimeRange(timeRangeId){
-    //     AppDispatcher.dispatch({
-    //         actionType: AppConst.PLANNER_SET_SELECTED_PLANNER,
-    //         payload: {
-    //             selectedTimeRangeId: timeRangeId
-    //         }
-    //     });
-    // };
+    setVisitsByDate(selectedDate){
+        let dates = CalendarFunctions.getWholeWeekBySelectedDate(selectedDate);
+        let visitDaysForSlides = [];
+        firebase.auth().onAuthStateChanged(user => {
+            if(user){
+                Planner.getVisitDaysByDates(dates, user.uid).then(function(visitDays){
+                    visitDaysForSlides = visitDays;
+                    AppDispatcher.dispatch({
+                        actionType: AppConst.PLANNER_SET_VISIT_DAYS_FROM_DATABASE,
+                        payload: {
+                            visitDays: visitDays
+                        }
+                    });
+                }).then(function(){
+                    CalendarGridActionCreator.setSlideDays(visitDaysForSlides);
+                });
+            }
+        });
+    };
 }
 
 export default new PlannerActionCreator();

@@ -1,15 +1,24 @@
-import AppDispatcher from '../dispatcher/AppDispatcher'
-import AppConst from '../constants/AppConst'
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import AppConst from '../constants/AppConst';
+import CalendarGridFunctions from '../utils/CalendarGridFunctions';
 
 class CalendarGridActionCreator {
-    selectWeekByDayInCalendar(date){
+    setSlideDays(days){
         AppDispatcher.dispatch({
-            actionType: AppConst.SELECT_WHOLE_WEEK_BY_DAY_IN_CALENDAR,
+            actionType: AppConst.SET_DAY_SLIDES,
             payload: {
-                selectedDate: date
+                slideDays: CalendarGridFunctions.generateWeekSlides(days, true)
             }
         })
     };
+    // setDaySlides(day){
+    //     AppDispatcher.dispatch({
+    //         actionType: AppConst.SELECT_WHOLE_WEEK_BY_DAY_IN_CALENDAR,
+    //         payload: {
+    //             selectedDate: date
+    //         }
+    //     })
+    // };
 }
 
 export default new CalendarGridActionCreator();

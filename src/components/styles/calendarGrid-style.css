@@ -124,3 +124,13 @@ button.control-arrow.control-prev{
 .table-striped tbody tr:nth-of-type(odd){
     /* background-color: #dee2e6; */
   }
+
+ul.slider.animated {
+      height: 281px !important;
+      background: #dee2e6;
+  }
+
+div.slider-wrapper.axis-vertical {
+    height: 281px !important;
+    background: #dee2e6;
+}

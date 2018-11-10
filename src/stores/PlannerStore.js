@@ -115,6 +115,40 @@ class PlannerStore extends EventEmitter {
                 _isRead = true;
                 break;
             }
+            case AppConst.PLANNER_SET_VISIT_DAYS_FROM_DATABASE: {
+                let visitDays = action.payload.visitDays;
+                let self = this;
+                //this.clearDaysData();
+                _.each(visitDays, function(visitDay){
+                    self.actionForDayByKeyDay("mon", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("tue", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("wed", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("thu", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("fri", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("sat", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                    self.actionForDayByKeyDay("sun", function(day){
+                        self.setVisitDay(day, visitDay);
+                    });
+                });
+                
+                _currentDayKey = "";
+                _isEdit = false;
+                _isNew = false;
+                _isRead = true;
+                break;
+            }
             // case AppConst.TIME_RANGE_CLEAR_DATA: {
             //     _id = null;
             //     _timeFrom = null
@@ -199,6 +233,12 @@ class PlannerStore extends EventEmitter {
             day.dailyPlanId = dayPlan.dailyPlanId;
             day.id = dayPlan.id;
             day.plannerId = dayPlan.plannerId;
+        }
+    }
+
+    setVisitDay(day, visitDay){
+        if(CalendarFunctions.getDateFormatForDatbase(day.date) === visitDay.date){
+            day.visitDay = visitDay;
         }
     }
 
