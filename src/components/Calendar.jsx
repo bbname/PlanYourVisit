@@ -8,6 +8,8 @@ import "./styles/calendar-style.css";
 import {Row, Col} from "react-bootstrap";
 import PlannerActionCreator from "../actions/PlannerActionCreator";
 import _ from 'underscore';
+import VisitorActionCreator from '../actions/VisitorActionCreator';
+import VisitorStore from '../stores/VisitorStore';
 
 class Calendar extends React.Component{
     constructor(props){
@@ -29,9 +31,15 @@ class Calendar extends React.Component{
     }
 
     componentDidMount() {
-        PlannerActionCreator.setDatesFromCalendar(this.state.selectedDate); 
-        PlannerActionCreator.setPlansByDate(this.state.selectedDate); 
-        PlannerActionCreator.setVisitsByDate(this.state.selectedDate); 
+        if(this.props.isForVisitor === undefined){
+            PlannerActionCreator.setDatesFromCalendar(this.state.selectedDate); 
+            PlannerActionCreator.setPlansByDate(this.state.selectedDate); 
+            PlannerActionCreator.setVisitsByDate(this.state.selectedDate); 
+        }
+        if(this.props.isForVisitor === true){
+            VisitorActionCreator.setDatesFromCalendar(this.state.selectedDate);
+            VisitorActionCreator.setVisitsByDate(this.state.selectedDate, VisitorStore.getPlannerId());
+        }
     }
  
     componentWillUnmount() {
@@ -47,28 +55,58 @@ class Calendar extends React.Component{
 
     handleOnDatePickerChange(date){
         CalendarActionCreator.selectWeekByDayInCalendar(date, this.state.plannerId); 
-        PlannerActionCreator.setPlansByDate(date); 
-        PlannerActionCreator.setVisitsByDate(date); 
+        if(this.props.isForVisitor === undefined){
+            PlannerActionCreator.setPlansByDate(date); 
+            PlannerActionCreator.setVisitsByDate(date); 
+        }
+        if(this.props.isForVisitor === true){
+            VisitorActionCreator.setVisitsByDate(date, VisitorStore.getPlannerId());
+        }
+    }
+
+    generateDatePicker(){
+        if(this.props.shouldBeAlwaysFullWide){
+            return (
+                <Row>
+                    <div className="col-12">
+                    </div>
+                    <div className="col-12">
+                        <DatePicker 
+                                inline
+                                locale="pl"
+                                selected = {this.state.selectedDate}
+                                minDate = {this.state.minDate}
+                                maxDate = {this.state.maxDate}
+                                onChange = {this.handleOnDatePickerChange}
+                                highlightDates = {this.state.highlightDates}
+                            />                 
+                    </div>
+                </Row>
+            );
+        }
+        else{
+            return (
+                <Row>
+                    <Col xs={12} sm={2} md={3} lg={4}>
+                    </Col>
+                    <Col xs={12} sm={8} md={6} lg={4}>
+                        <DatePicker 
+                                inline
+                                locale="pl"
+                                selected = {this.state.selectedDate}
+                                minDate = {this.state.minDate}
+                                maxDate = {this.state.maxDate}
+                                onChange = {this.handleOnDatePickerChange}
+                                highlightDates = {this.state.highlightDates}
+                            />                 
+                    </Col>
+                </Row>
+            );
+        }
     }
 
     render() {
-        return (
-            <Row>
-                <Col xs={12} sm={2} md={3} lg={4}>
-                </Col>
-                <Col xs={12} sm={8} md={6} lg={4}>
-                    <DatePicker 
-                            inline
-                            locale="pl"
-                            selected = {this.state.selectedDate}
-                            minDate = {this.state.minDate}
-                            maxDate = {this.state.maxDate}
-                            onChange = {this.handleOnDatePickerChange}
-                            highlightDates = {this.state.highlightDates}
-                        />                 
-                </Col>
-            </Row>
-        );
+        return this.generateDatePicker()
     }
 }
 

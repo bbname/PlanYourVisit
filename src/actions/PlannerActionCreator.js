@@ -164,7 +164,7 @@ class PlannerActionCreator {
                         }
                     });
                 }).then(function(){
-                    CalendarGridActionCreator.setSlideDays(visitDaysForSlides);
+                    CalendarGridActionCreator.setSlideDays(visitDaysForSlides, true);
                 });
             }
         });

@@ -48,7 +48,7 @@ class Planner extends React.Component {
                 <div className="row">
                     <div className="col-12">
                         <h1 className="jumbotron-heading text-center">
-                            Tutaj będzie dodawanie planów dni do dni.
+                            Planer
                         </h1>
                     </div>
                 </div>

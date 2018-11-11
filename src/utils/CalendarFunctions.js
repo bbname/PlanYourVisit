@@ -70,6 +70,9 @@ module.exports = {
     getDateFormatForDatbase: function(dateObj){
         return dateObj.format("YYYY-MM-DD");
     },
+    getDateWithHoursFormatForDatabase: function(dateObj){
+        return dateObj.format("YYYY-MM-DD HH:mm");
+    },
     getDateWithHourMomentObjFromDatabaseFormat: function(dateString){
         return moment(dateString, "YYYY-MM-DD HH:mm");
     },

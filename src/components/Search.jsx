@@ -4,6 +4,7 @@ import AutosuggestHighlightMatch from 'autosuggest-highlight/match';
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
 import "./styles/search-style.css"
 import SearchActionCreator from "../actions/SearchActionCreator";
+import VisitorActionCreator from "../actions/VisitorActionCreator";
 import SearchStore from "../stores/SearchStore";
 import {
     Link
@@ -17,6 +18,10 @@ function getCitySuggestionValue(suggestion) {
     return `${suggestion}`;
 }
 
+function onSpecialistClick (e) {
+    VisitorActionCreator.setPlannerId(e.currentTarget.id);
+}
+
 function renderSpecialistSuggestion(suggestion, { query }) {
     const suggestionText = `${suggestion.name}`;
     const matches = AutosuggestHighlightMatch(suggestionText, query);
@@ -27,7 +32,7 @@ function renderSpecialistSuggestion(suggestion, { query }) {
     }
 
     return (
-        <Link to={'/specialist/'+ suggestion.uid} style={hiddenLinkStyle}>
+        <Link to={'/specialist/'+ suggestion.uid} style={hiddenLinkStyle} onClick={onSpecialistClick} id={suggestion.uid}>
             <span className={'suggestion-content'}>
                 <img className="plannerImage" src={suggestion.imageUrl} alt="..." />
                 <span className="name">

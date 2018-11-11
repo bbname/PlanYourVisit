@@ -17,8 +17,6 @@ const config = {
     messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID
   };
 
-
-
 firebase.initializeApp(config);
 
 firebase.auth().onAuthStateChanged(user => {

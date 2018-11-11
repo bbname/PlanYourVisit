@@ -3,11 +3,11 @@ import AppConst from '../constants/AppConst';
 import CalendarGridFunctions from '../utils/CalendarGridFunctions';
 
 class CalendarGridActionCreator {
-    setSlideDays(days){
+    setSlideDays(days, isForPlanner){
         AppDispatcher.dispatch({
             actionType: AppConst.SET_DAY_SLIDES,
             payload: {
-                slideDays: CalendarGridFunctions.generateWeekSlides(days, true)
+                slideDays: CalendarGridFunctions.generateWeekSlides(days, isForPlanner)
             }
         })
     };
