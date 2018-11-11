@@ -105,3 +105,9 @@ nav {
 .time-icon:hover {
     cursor: pointer;
 }
+
+@media screen and (min-height: 1080px) {
+    .footer{
+        position: relative;
+    }
+}

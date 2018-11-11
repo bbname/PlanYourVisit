@@ -19,6 +19,7 @@ import Planner from './Planner/Planner.jsx';
 import TimeRange from './Planner/TimeRange.jsx';
 import VisitType from './Planner/VisitType.jsx';
 import DailyPlan from './Planner/DailyPlan.jsx';
+import Visits from './Visits.jsx';
 
 class App extends Component {
     handleOnProfileClick = (e) => {
@@ -36,8 +37,6 @@ class App extends Component {
                             <Grid role="main">
                                 <Header 
                                     uiConfig = {this.props.uiConfig}
-                                    // homePage = {<Link className="navbar-brand" to="/">Plan Your Visit</Link>}
-                                    // profile = {<Link className="nav-link" to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link>}
                                 />
                                 <HomePage />
                             </Grid>
@@ -50,8 +49,6 @@ class App extends Component {
                             <Grid role="main">
                                 <Header 
                                     uiConfig = {this.props.uiConfig}
-                                    // homePage = {<Link className="navbar-brand" to="/">Plan Your Visit</Link>}
-                                    // profile = {<Link className="nav-link" to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link>}
                                 />
                                 <Profile />
                             </Grid>
@@ -64,12 +61,22 @@ class App extends Component {
                             <Grid role="main">
                                 <Header 
                                     uiConfig = {this.props.uiConfig}
-                                    // homePage = {<Link className="navbar-brand" to="/">Plan Your Visit</Link>}
-                                    // profile = {<Link className="nav-link" to="/profile"><i className="fa fa-user" aria-hidden="true"></i> Profil</Link>}
                                 />
                                 <SpecialistPage
                                     plannerId = {matchProps.match.params.id}     
                                 />
+                            </Grid>
+                            <Footer />
+                        </div>
+                        )} 
+                    />
+                    <Route path="/visits" render={matchProps => (
+                        <div>
+                            <Grid role="main">
+                                <Header 
+                                    uiConfig = {this.props.uiConfig}
+                                />
+                                <Visits />
                             </Grid>
                             <Footer />
                         </div>

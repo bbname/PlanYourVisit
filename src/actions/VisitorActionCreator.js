@@ -99,6 +99,11 @@ class VisitorActionCreator {
                     if(nextHour.isReserved){
                         break;
                     }
+                    else if(nextHour === lastElement){
+                        availableVisitTypesForSelectedHour.push(visitType);
+                        break;
+                    }
+
                 }
                 else{
                     availableVisitTypesForSelectedHour.push(visitType);
@@ -109,18 +114,6 @@ class VisitorActionCreator {
 
         return availableVisitTypesForSelectedHour;
     }
-    // setAvailableVisitTypes(date, plannerId){
-    //     if(date !== undefined && plannerId !== null){
-    //         Visitor.getAvailableVisitTypesForDate(date, plannerId).then(function(visitTypes){
-    //             AppDispatcher.dispatch({
-    //                 actionType: AppConst.VISITOR_SET_AVAILABLE_VISIT_TYPES,
-    //                 payload: {
-    //                     availableVisitTypes: visitTypes
-    //                 }
-    //             });
-    //         });
-    //     }
-    // };
     setDatesFromCalendar(selectedDate){
         AppDispatcher.dispatch({
             actionType: AppConst.SET_SELECTED_WEEK_DATES,
@@ -153,12 +146,6 @@ class VisitorActionCreator {
         firebase.auth().onAuthStateChanged(user => {
             if(user !== undefined && plannerId !== null){
                 Visitor.reserveVisit(user.uid, plannerId, selectedVisit, selectedVisitType).then(function(boolVal){
-                    // AppDispatcher.dispatch({
-                    //     actionType: AppConst.VISITOR_SET_VISIT_DAYS_FROM_DATABASE,
-                    //     payload: {
-                    //         x: x
-                    //     }
-                    // });
                 }).then(function(){
                     self.closeReserveVisitModal();
                     let date = CalendarFunctions.getDateMomentObjFromDatabaseFormat(selectedVisit.date)
@@ -170,84 +157,6 @@ class VisitorActionCreator {
     closeReserveVisitModal(){
         document.getElementById("close-reserve-visit-modal").click();
     };
-    // closeBtnClicked(){
-    //     AppDispatcher.dispatch({
-    //         actionType: AppConst.PLANNER_CREATOR_CLOSE_BTN_CLICKED
-    //     });
-    // };
-    // editBtnClicked(dayKey){
-    //     AppDispatcher.dispatch({
-    //         actionType: AppConst.PLANNER_CREATOR_EDIT_BTN_CLICKED,
-    //         payload: {
-    //             dayKey: dayKey
-    //         }
-    //     });
-    // };
-    // addBtnClicked(){
-    //     // AppDispatcher.dispatch({
-    //     //     actionType: AppConst.PLANNER_CLEAR_DATA
-    //     // });
-    //     AppDispatcher.dispatch({
-    //         actionType: AppConst.PLANNER_CREATOR_ADD_BTN_CLICKED
-    //     });
-    // };
-    // deleteBtnClicked(day){
-    //     let self = this;
-
-    //     Planner.deleteDailyPlanWithDate(day.id).then(function(boolVal){
-    //         AppDispatcher.dispatch({
-    //             actionType: AppConst.PLANNER_CREATOR_DELETE_BTN_CLICKED
-    //         });
-    //     }).then(function(){
-    //         // AppDispatcher.dispatch({
-    //         //     actionType: AppConst.PLANNER_CLEAR_DATA
-    //         // });
-    //     }).then(function(){
-    //         self.setPlansByDate(day.date);
-    //         self.setVisitsByDate(day.date);
-    //     });
-    // };
-    // createBtnClicked(day){
-    //     let user = firebase.auth().currentUser;
-    //     let dayForDb = {
-    //         dailyPlanId: day.dailyPlanId,
-    //         date: day.date
-    //     };
-    //     let self = this;
-
-    //     Planner.createDailyPlanWithDate(dayForDb, user.uid).then(function(boolVal){
-    //         AppDispatcher.dispatch({
-    //             actionType: AppConst.PLANNER_CREATOR_CREATE_BTN_CLICKED
-    //         });
-    //     }).then(function(){
-    //         // AppDispatcher.dispatch({
-    //         //     actionType: AppConst.PLANNER_CLEAR_DATA
-    //         // });
-    //     })
-    //     .then(function(){
-    //         self.setPlansByDate(day.date);
-    //         self.setVisitsByDate(day.date);
-    //     });
-    // };
-    // saveBtnClicked(day){
-    //     let user = firebase.auth().currentUser;
-    //     let dayForDb = {
-    //         dailyPlanId: day.dailyPlanId,
-    //         date: day.date,
-    //         id: day.id,
-    //         plannerId: day.plannerId
-    //     };
-    //     let self = this;
-
-    //     Planner.saveDailyPlanWithDate(dayForDb, user.uid).then(function(boolVal){
-    //         AppDispatcher.dispatch({
-    //             actionType: AppConst.PLANNER_CREATOR_SAVE_BTN_CLICKED
-    //         });
-    //     }).then(function(){
-    //         self.setPlansByDate(day.date);
-    //         self.setVisitsByDate(day.date);
-    //     });
-    // }
 }
 
 export default new VisitorActionCreator();

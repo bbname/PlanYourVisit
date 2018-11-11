@@ -1,4 +1,6 @@
 module.exports = {
+    VISITS_SET_VISIT_DAYS_FOR_PLANNER_FROM_DATABASE: "VisitsSetVisitDaysForPlannerFromDatabase",
+    VISITS_SET_VISIT_DAYS_FROM_DATABASE: "VisitsSetVisitDaysFromDatabase",
     VISITOR_SET_SELECTED_VISIT_DAY_WITH_HOURS: "VisitorSetSelectedVisitDayWithHours",
     VISITOR_SET_AVAILABLE_VISIT_TYPES: "VisitSetAvailableVisitTypes",
     VISITOR_SET_SELECTED_VISIT_TYPE: "VisitSetSelectedVisitType",

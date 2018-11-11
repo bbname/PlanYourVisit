@@ -59,14 +59,6 @@ class VisitorStore extends EventEmitter {
             case AppConst.VISITOR_SET_AVAILABLE_VISIT_TYPES: {
                 _availableVisitTypes = action.payload.availableVisitTypes;
                 _selectedVisitType = _availableVisitTypes[0];
-                // let availableVisitTypes = action.payload.availableVisitTypes;
-                // _availableVisitTypes = VisitorFunctions.getAvailableVisitTypes(_selectedVisit.hours, _selectedVisit.date, availableVisitTypes);
-                // let availableVisitTypes = action.payload.availableVisitTypes;
-                // _availableVisitTypes = [];
-                // _.each(availableVisitTypes, function(visitType){
-                //     _availableVisitTypes.push(visitType);
-                // });
-                // _selectedVisitType = availableVisitTypes[Object.keys(availableVisitTypes)[0]];
                 break;
             }
             case AppConst.SET_SELECTED_WEEK_DATES: {
@@ -114,44 +106,6 @@ class VisitorStore extends EventEmitter {
                 _isRead = true;
                 break;
             }
-            // case AppConst.TIME_RANGE_CLEAR_DATA: {
-            //     _id = null;
-            //     _timeFrom = null
-            //     _timeTo = null;
-            //     _timeStep = _availableTimeSteps[0];
-            //     break;
-            // }
-            // case AppConst.PLANNER_CREATOR_EDIT_BTN_CLICKED: {
-            //     _currentDayKey = action.payload.dayKey;
-            //     _isEdit = true;
-            //     _isNew = false;
-            //     _isRead = false;
-            //     break;      
-            // }
-            // case AppConst.PLANNER_CREATOR_CLOSE_BTN_CLICKED: {
-            //     _isEdit = false;
-            //     _isNew = false;
-            //     _isRead = true;
-            //     break;      
-            // }
-            // case AppConst.PLANNER_CREATOR_SAVE_BTN_CLICKED: {
-            //     _isEdit = false;
-            //     _isNew = false;
-            //     _isRead = true;
-            //     break;      
-            // }
-            // case AppConst.PLANNER_CREATOR_ADD_BTN_CLICKED: {
-            //     _isEdit = false;
-            //     _isNew = true; 
-            //     _isRead = null;              
-            //     break;
-            // }
-            // case AppConst.PLANNER_CREATOR_DELETE_BTN_CLICKED: {
-            //     _isEdit = false;
-            //     _isNew = true;
-            //     _isRead = null;
-            //     break;      
-            // }
           }
 
         this.emitChange(ALL);

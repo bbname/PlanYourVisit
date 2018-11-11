@@ -5,7 +5,251 @@ import CalendarFunctions from "../utils/CalendarFunctions";
 import DailyPlan from "./DailyPlan";
 import moment from 'moment';
 
-module.exports = {
+module.exports = {    
+    deleteVisitForPlanner: function (plannerId, userId, visitDate){
+        if(userId === undefined || plannerId === undefined){
+            return null;
+        }
+
+        let additionalHoursToUpdate;
+        let dateObj = CalendarFunctions.getDateWithHourMomentObjFromDatabaseFormat(visitDate);
+        let date = CalendarFunctions.getDateFormatForDatbase(dateObj);
+        let hour = CalendarFunctions.getHoursFormatForDatabase(dateObj);
+
+        return firebase.database().ref('/visitors/' + userId + '/visits/' + plannerId + '/' + visitDate).update({
+            plannerCancel: true
+        }).then(function(){
+            return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour).update({
+                isReserved: false
+            }).then(function(){
+                return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour + '/clientId').remove()
+                .then(function(){
+                    return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour + '/partOf').remove()
+                    .then(function(){
+                        return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour + '/plannerCancel').remove()
+                        .then(function(){
+                            return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour + '/selectedVisitTypeId').remove()
+                            .then(function(){
+                                return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour + '/userConfirmed').remove()
+                            });
+                        });
+                    });
+                });
+            }).then(function(){
+                return firebase.database().ref('/visits/' + plannerId + '/' + date)
+                .orderByChild('partOf').equalTo(visitDate).once('value').then(function(snapshot) {
+                    additionalHoursToUpdate = snapshot.val();
+                   return additionalHoursToUpdate;
+                }).then(function(){
+                    _.each(additionalHoursToUpdate, function(additionalHour){
+                        let additionalDateObj = CalendarFunctions.getDateWithHourMomentObjFromDatabaseFormat(additionalHour.date);
+                        let addHour = CalendarFunctions.getHoursFormatForDatabase(additionalDateObj);
+
+                        firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour).update({
+                            isReserved: false
+                        }).then(function(){
+                            return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour + '/clientId').remove()
+                            .then(function(){
+                                return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour + '/partOf').remove()
+                                .then(function(){
+                                    return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour + '/plannerCancel').remove()
+                                    .then(function(){
+                                        return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour + '/selectedVisitTypeId').remove()
+                                        .then(function(){
+                                            return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour + '/userConfirmed').remove()
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                    
+                    return true;
+                });
+            });
+        });
+    },
+    getClientsForHours: function(hour){
+        return firebase.database().ref('/users/' + hour.clientId).once('value')
+        .then(function(snapshot){
+            hour.client = {};
+            let client = snapshot.val();
+            hour.client.name = client.name;
+            hour.client.email = client.email;
+            hour.client.phone = client.phone;
+
+            return hour;
+        });
+    },
+    getReservedVisitsForPlanner: function(plannerId){
+    let id = plannerId;
+
+    if(id === undefined){
+        return null;
+    }
+
+    let allPlannerVisitDays;
+    let visitDays = [];
+
+    return firebase.database().ref('/visits/' + id).once('value')
+    .then(function(snapshot){
+        allPlannerVisitDays = snapshot.val();
+    }).then(function(){
+        let allDaysDates = Object.keys(allPlannerVisitDays);
+        let counter = 0;
+
+        _.each(allPlannerVisitDays, function(visitDayHours){
+            let day = {};
+            day.date = allDaysDates[counter];
+            day.hours = [];
+
+            _.each(visitDayHours, function(hour){
+                if(hour.isReserved && hour.partOf === undefined){
+                    day.hours.push(hour);
+                }
+            });
+
+            if(day.hours.length > 0){
+                visitDays.push(day);
+            }
+
+            counter++;
+        });
+
+        return visitDays;
+    });
+},
+    deleteVisitForVisitor: function(userId, plannerId, visitDate){
+        if(userId === undefined || plannerId === undefined){
+            return null;
+        }
+
+        return firebase.database().ref('/visitors/' + userId + '/visits/' + plannerId + '/' + visitDate).remove();
+    },
+    cancelVisitReservation: function(userId, plannerId, visitDate){
+        if(userId === undefined || plannerId === undefined){
+            return null;
+        }
+
+        let additionalHoursToUpdate;
+        let dateObj = CalendarFunctions.getDateWithHourMomentObjFromDatabaseFormat(visitDate);
+        let date = CalendarFunctions.getDateFormatForDatbase(dateObj);
+        let hour = CalendarFunctions.getHoursFormatForDatabase(dateObj);
+
+        return firebase.database().ref('/visitors/' + userId + '/visits/' + plannerId + '/' + visitDate).update({
+            userConfirmed: false,
+            userCanceled: true
+        }).then(function(){
+            return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour).update({
+                isReserved: false
+            }).then(function(){
+                return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour + '/clientId').remove()
+                .then(function(){
+                    return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour + '/partOf').remove()
+                    .then(function(){
+                        return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour + '/plannerCancel').remove()
+                        .then(function(){
+                            return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour + '/selectedVisitTypeId').remove()
+                            .then(function(){
+                                return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour + '/userConfirmed').remove()
+                            });
+                        });
+                    });
+                });
+            }).then(function(){
+                return firebase.database().ref('/visits/' + plannerId + '/' + date)
+                .orderByChild('partOf').equalTo(visitDate).once('value').then(function(snapshot) {
+                    additionalHoursToUpdate = snapshot.val();
+                   return additionalHoursToUpdate;
+                }).then(function(){
+                    _.each(additionalHoursToUpdate, function(additionalHour){
+                        let additionalDateObj = CalendarFunctions.getDateWithHourMomentObjFromDatabaseFormat(additionalHour.date);
+                        let addHour = CalendarFunctions.getHoursFormatForDatabase(additionalDateObj);
+
+                        firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour).update({
+                            isReserved: false
+                        }).then(function(){
+                            return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour + '/clientId').remove()
+                            .then(function(){
+                                return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour + '/partOf').remove()
+                                .then(function(){
+                                    return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour + '/plannerCancel').remove()
+                                    .then(function(){
+                                        return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour + '/selectedVisitTypeId').remove()
+                                        .then(function(){
+                                            return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour + '/userConfirmed').remove()
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                    
+                    return true;
+                });
+            });
+        });
+    },
+    confirmVisitReservation: function(userId, plannerId, visitDate){
+        if(userId === undefined || plannerId === undefined){
+            return null;
+        }
+
+        let additionalHoursToUpdate;
+        let dateObj = CalendarFunctions.getDateWithHourMomentObjFromDatabaseFormat(visitDate);
+        let date = CalendarFunctions.getDateFormatForDatbase(dateObj);
+        let hour = CalendarFunctions.getHoursFormatForDatabase(dateObj);
+
+        return firebase.database().ref('/visitors/' + userId + '/visits/' + plannerId + '/' + visitDate).update({
+            userConfirmed: true
+        }).then(function(){
+            return firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + hour).update({
+                userConfirmed: true
+            }).then(function(){
+                return firebase.database().ref('/visits/' + plannerId + '/' + date)
+                .orderByChild('partOf').equalTo(visitDate).once('value').then(function(snapshot) {
+                    additionalHoursToUpdate = snapshot.val();
+                   return additionalHoursToUpdate;
+                }).then(function(){
+                    _.each(additionalHoursToUpdate, function(additionalHour){
+                        let additionalDateObj = CalendarFunctions.getDateWithHourMomentObjFromDatabaseFormat(additionalHour.date);
+                        let addHour = CalendarFunctions.getHoursFormatForDatabase(additionalDateObj);
+
+                        firebase.database().ref('/visits/' + plannerId + '/' + date + '/' + addHour).update({
+                            userConfirmed: true
+                        });
+                    });
+
+                    return true;
+                });
+            });
+        });
+    },
+    getReservedVisits: function(userId){
+        let id = userId;
+
+        if(id === undefined){
+            return null;
+        }
+
+        let allPlannersWithVisits;
+
+        return firebase.database().ref('/visitors/' + id + '/visits/').once('value')
+        .then(function(snapshot){
+            allPlannersWithVisits = snapshot.val();
+            return allPlannersWithVisits;
+        }).then(function(){
+            let visits = [];
+
+            _.each(allPlannersWithVisits, function(plannerVisits){
+                _.each(plannerVisits, function(visitDay){
+                    visits.push(visitDay);
+                });
+            });
+
+            return visits;
+        });
+    },
     getVisitDayWithHours: function(stringDate, plannerId){
         let id = plannerId;
 
@@ -88,23 +332,6 @@ module.exports = {
                 plannerCancel: false
             });
         });
-
-
-        // return firebase.database().ref('/visits/' + id + '/' + date + '/' + hour).update({
-        //     isReserved: true,
-        //     clientId: userId,
-        //     selectedVisitTypeId: selectedVisitType.id,
-        //     userConfirmed: false,
-        //     plannerCancel: false
-        // }).then(function(){
-        //     return firebase.database().ref('/visitors/' + userId + '/visits/' + plannerId + '/' + stringDate).set({
-        //         date: stringDate,
-        //         plannerId: plannerId,
-        //         visitType: selectedVisitType,
-        //         userConfirmed: false,
-        //         plannerCancel: false
-        //     });
-        // });
     },
     getAvailableVisitTypesForDate: function(stringDate, plannerId){
         let id = plannerId;
@@ -199,152 +426,5 @@ module.exports = {
                     });
                 });
             });
-    },
-    // getVisitDaysByDate: function(date, plannerId){
-    //     let id = plannerId;
-
-    //     if(id == null){
-    //         let user = firebase.auth().currentUser;
-    //         id = user.uid;
-    //     }
-        
-    //     let allPlannerVisitDays;
-    //     return firebase.database().ref('/visits/')
-    //     .orderByChild('plannerId').equalTo(id)
-    //     .once('value').then(function(snapshot){
-    //         allPlannerVisitDays = snapshot.val();
-    //         return true;
-    //     }).then(function(){
-    //         return _.filter(allPlannerVisitDays, function(visitDay){
-    //             return visitDay === CalendarFunctions.getDateFormatForDatbase(date);
-    //         });
-    //     });
-    // },
-    // createDailyPlanWithDate: function(day, plannerId){
-    //     let id = plannerId;
-
-    //     if(plannerId == null){
-    //         let user = firebase.auth().currentUser;
-    //         id = user.uid;
-    //     }
-
-    //     let plansRef = firebase.database().ref('plans/');
-    //     let newPlanRef = plansRef.push();
-    //     let newId = newPlanRef.getKey();
-
-    //     return newPlanRef.set({
-    //         id: newId,
-    //         plannerId: id,
-    //         dailyPlanId: day.dailyPlanId,
-    //         date: CalendarFunctions.getDateFormatForDatbase(day.date)
-    //     }).then(function(){
-    //         let timeRangesRef = firebase.database().ref('dailyPlans/' + day.dailyPlanId + '/timeRanges');
-    //         let timeRanges;
-
-    //         return timeRangesRef.once('value').then(function(snapshot) {
-    //             timeRanges = snapshot.val();
-    //             return true;
-    //         }).then(function(){
-    //             _.each(timeRanges, function(timeRange){
-    //                 let dates = CalendarFunctions.generateMomentDatesForTimeRangeHours(
-    //                     CalendarFunctions.getDateFormatForDatbase(day.date), 
-    //                     timeRange.timeFrom, 
-    //                     timeRange.timeTo, 
-    //                     timeRange.timeStep);
-
-    //                 let calendarDate = dates[0].format("YYYY-MM-DD");  
-
-    //                 _.each(dates, function(date){
-    //                     let hour = date.format("HH:mm");
-    //                     return firebase.database().ref('visits/' + id + '/' + calendarDate + '/' + hour).set({
-    //                         date: date.format("YYYY-MM-DD HH:mm"),
-    //                         isReserved: false
-    //                     }).then(function(){
-    //                         return DailyPlan.getDailyPlan(day.dailyPlanId).then(function(dailyPlan){
-    //                             _.each(dailyPlan.visitTypes, function(visitType){
-    //                                 firebase.database().ref('visits/' + id + '/' + calendarDate + '/' + hour + '/availableVisitTypes/' + visitType.id).set(visitType);
-    //                             });
-    //                         });
-    //                     });
-    //                 });
-    //             });
-    //         });
-    //     }).catch(function(error){
-    //         return false;
-    //     });
-    // },
-    // saveDailyPlanWithDate: function(day, plannerId){
-    //     let id = plannerId;
-
-    //     if(plannerId == null){
-    //         let user = firebase.auth().currentUser;
-    //         id = user.uid;
-    //     }
-
-    //     let planRef = firebase.database().ref('plans/' + day.id);
-
-    //     return planRef.update({
-    //         id: day.id,
-    //         plannerId: id,
-    //         dailyPlanId: day.dailyPlanId,
-    //         date: CalendarFunctions.getDateFormatForDatbase(day.date)
-    //     }).then(function(){
-    //         let timeRangesRef = firebase.database().ref('dailyPlans/' + day.dailyPlanId + '/timeRanges');
-    //         let timeRanges;
-
-    //             return timeRangesRef.once('value').then(function(snapshot) {
-    //             timeRanges = snapshot.val();
-    //             return true;
-    //         }).then(function(){
-    //             _.each(timeRanges, function(timeRange){
-    //                 let dates = CalendarFunctions.generateMomentDatesForTimeRangeHours(
-    //                     CalendarFunctions.getDateFormatForDatbase(day.date), 
-    //                     timeRange.timeFrom, 
-    //                     timeRange.timeTo, 
-    //                     timeRange.timeStep);
-
-    //                 let calendarDate = dates[0].format("YYYY-MM-DD");  
-
-
-
-
-    //                 return firebase.database().ref('visits/' + id + '/' + calendarDate).remove().then(function(){
-    //                     _.each(dates, function(date){
-    //                         let hour = date.format("HH:mm");
-    //                         return firebase.database().ref('visits/' + id + '/' + calendarDate + '/' + hour).set({
-    //                             date: date.format("YYYY-MM-DD HH:mm"),
-    //                             isReserved: false
-    //                         }).then(function(){
-    //                             return DailyPlan.getDailyPlan(day.dailyPlanId).then(function(dailyPlan){
-    //                                 _.each(dailyPlan.visitTypes, function(visitType){
-    //                                     firebase.database().ref('visits/' + id + '/' + calendarDate + '/' + hour + '/availableVisitTypes/' + visitType.id).set(visitType);
-    //                                 });
-    //                             });
-    //                         });
-    //                     });
-    //                 });
-    //             });
-    //         });
-    //     }).catch(function(error){
-    //         return false;
-    //     });
-    // },
-    // deleteDailyPlanWithDate: function(planId){
-    //     let planRef = firebase.database().ref('plans/' + planId);
-    //     let plan;
-
-    //     return planRef.once('value').then(function(snapshot) {
-    //         plan = snapshot.val();
-    //         return true;
-    //       }).then(function(){
-    //         return firebase.database().ref('visits/' + plan.plannerId + '/' + plan.date).remove().then(function(){
-    //             return planRef.remove()
-    //             .then(function(){
-    //                 return true;
-    //             }).catch(function(error){
-    //                 return false;
-    //             });
-    //         });
-    //       });
-    // },
+    }
 }
